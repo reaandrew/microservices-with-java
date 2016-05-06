@@ -1,5 +1,8 @@
 package uk.co.andrewrea;
 
+import com.codahale.metrics.health.HealthCheck;
+import com.codahale.metrics.health.HealthCheckRegistry;
+import com.google.gson.Gson;
 import spark.Service;
 
 /**
@@ -9,9 +12,16 @@ public class ClaimHttpService {
 
     private int port;
     private Service service;
+    private final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
 
     public ClaimHttpService(int port){
         this.port = port;
+        healthChecks.register("application", new HealthCheck() {
+            @Override
+            protected Result check() throws Exception {
+                return Result.healthy();
+            }
+        });
     }
 
     public void start(){
@@ -23,7 +33,8 @@ public class ClaimHttpService {
         } );
         http.get("/health",(req,res) -> {
             res.status(200);
-            return "";
+
+            return new Gson().toJson(healthChecks.runHealthChecks().values());
         } );
         http.get("/metrics",(req,res) -> {
             res.status(200);

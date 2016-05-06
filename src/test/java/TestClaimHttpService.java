@@ -2,10 +2,10 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
 import uk.co.andrewrea.ClaimHttpService;
 
 import java.util.HashMap;
@@ -15,10 +15,21 @@ import java.util.HashMap;
  */
 public class TestClaimHttpService {
 
-    @Test
-    public void doesSomething() throws UnirestException, JSONException {
-        ClaimHttpService service = new ClaimHttpService(8080);
+    private static ClaimHttpService service;
+
+    @BeforeClass
+    public static void before(){
+        service = new ClaimHttpService(8080);
         service.start();
+    }
+
+    @AfterClass
+    public static void after(){
+        service.stop();
+    }
+
+    @Test
+    public void claimReturnsReceived() throws UnirestException, JSONException {
 
         HashMap body = new HashMap();
         body.put("firstname","John");
@@ -34,6 +45,14 @@ public class TestClaimHttpService {
 
         Assert.assertEquals(response.getBody().getObject().getString("status"), "received");
 
-        service.stop();
+    }
+
+    @Test
+    public void serviceReturnsHealthyStatus() throws UnirestException, JSONException {
+        HttpResponse<JsonNode> response = Unirest.get("http://localhost:8080/health")
+                .asJson();
+
+        JSONArray healthChecks = response.getBody().getArray();
+        Assert.assertEquals(healthChecks.getJSONObject(0).getBoolean("healthy"), true);
     }
 }
