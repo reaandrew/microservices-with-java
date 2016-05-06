@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+project.ext {
+    configPath = "$rootProject.projectDir/config/"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile "com.sparkjava:spark-core:2.5"
+    compile 'com.mashape.unirest:unirest-java:1.3.1'
+    compile 'io.dropwizard.metrics:metrics-core:3.1.2'
+    testCompile 'junit:junit:4.12'
+}
+
+//mainClassName = "uk.gov.dwp.techdesign.ClaimService"
+
+
+run {
+    args 'server', configPath + 'app_config.yml'
+}
