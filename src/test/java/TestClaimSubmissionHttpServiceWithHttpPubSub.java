@@ -8,10 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 import spark.Service;
-import uk.co.andrewrea.ClaimSubmissionHttpService;
-import uk.co.andrewrea.Subscription;
+import uk.co.andrewrea.config.ClaimSubmissionConfiguration;
+import uk.co.andrewrea.domain.events.ClaimSubmittedEvent;
+import uk.co.andrewrea.services.ClaimSubmissionHttpService;
+import uk.co.andrewrea.events.Subscription;
+import uk.co.andrewrea.infrastructure.http.HttpPubSub;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -21,13 +23,36 @@ import static spark.Service.ignite;
 /**
  * Created by vagrant on 5/6/16.
  */
-public class TestClaimSubmissionHttpServiceWithCustom {
+public class TestClaimSubmissionHttpServiceWithHttpPubSub {
 
     private static ClaimSubmissionHttpService service;
+    private static HttpPubSub publisher = new HttpPubSub();
+    private static ClaimSubmissionConfiguration claimSubmissionConfiguration = new ClaimSubmissionConfiguration();
 
     @BeforeClass
     public static void before(){
-        service = new ClaimSubmissionHttpService(8080);
+        Service http = Service.ignite().port(claimSubmissionConfiguration.port);
+
+        http.post("/sub", (req,res) -> {
+            Subscription sub = new Gson().fromJson(req.body(), Subscription.class);
+
+            publisher.addSubscription(sub);
+
+            res.status(201);
+            return "";
+        });
+        http.delete("/sub", (req,res) -> {
+            Subscription sub = new Gson().fromJson(req.body(), Subscription.class);
+            Boolean result = publisher.removeSubscription(sub);
+            if(result){
+                res.status(200);
+            }else{
+                res.status(404);
+            }
+            return "";
+        });
+        http.get("/sub", (req,res) -> new Gson().toJson(publisher.listSubscriptions()));
+        service = new ClaimSubmissionHttpService(http, publisher);
         service.start();
     }
 
@@ -39,7 +64,7 @@ public class TestClaimSubmissionHttpServiceWithCustom {
     @Test
     public void claimReturnsReceived() throws UnirestException, JSONException {
 
-        HashMap body = getClaimObject();
+        HashMap body = new SystemUnderTest().getSampleClaim();
 
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:8080/claims")
                 .body(new JSONObject(body).toString())
@@ -49,16 +74,6 @@ public class TestClaimSubmissionHttpServiceWithCustom {
         Assert.assertEquals(response.getBody().getObject().getString("status"), "received");
     }
 
-    private HashMap getClaimObject() {
-        HashMap body = new HashMap();
-        body.put("firstname","John");
-        body.put("middlenames","Joseph");
-        body.put("surname", "Doe");
-        body.put("dob","1983/04/21");
-        body.put("nino","AB000000A");
-        body.put("income",21000);
-        return body;
-    }
 
     @Test
     public void serviceReturnsHealthyStatus() throws UnirestException, JSONException {
@@ -70,33 +85,33 @@ public class TestClaimSubmissionHttpServiceWithCustom {
     }
 
     @Test
-    public void serviceAcceptsSubscription() throws UnirestException {
+    public void serviceAcceptsSubscription() throws UnirestException, InterruptedException {
 
         final CountDownLatch signal = new CountDownLatch(1);
         int port = 40001;
         Service http = ignite().port(port);
+        //Let the service start listening
+        Thread.sleep(500);
 
-        http.post("/pub/claimReceived", (req,res)->{
+        http.post(String.format("/pub/%s", ClaimSubmittedEvent.NAME), (req, res)->{
             signal.countDown();
             res.status(200);
             return "";
         });
 
-        String subscriptionUrl = String.format("http://localhost:%d/pub/claimReceived",port);
+        String subscriptionUrl = String.format("http://localhost:%d/pub/%s",port, ClaimSubmittedEvent.NAME);
 
         HttpResponse<String> subResponse = Unirest.post("http://localhost:8080/sub")
-                .body(new Gson().toJson(new Subscription(subscriptionUrl,"claimReceived")))
+                .body(new Gson().toJson(new Subscription(subscriptionUrl,ClaimSubmittedEvent.NAME)))
                 .asString();
 
         Assert.assertEquals(subResponse.getCode(), 201);
 
-        HashMap body = getClaimObject();
+        HashMap body = new SystemUnderTest().getSampleClaim();
 
         HttpResponse<String> claimResponse = Unirest.post("http://localhost:8080/claims")
                 .body(new JSONObject(body).toString())
                 .asString();
-
-        System.out.print(claimResponse.getBody());
 
         //This is how I have to synchronise the test for the time being.
         try {
@@ -109,9 +124,9 @@ public class TestClaimSubmissionHttpServiceWithCustom {
         }
 
         Unirest.delete("http://localhost:8080/sub")
-                .body(new Gson().toJson(new Subscription(subscriptionUrl,"claimReceived")))
+                .body(new Gson().toJson(new Subscription(subscriptionUrl,ClaimSubmittedEvent.NAME)))
                 .asString();
-        
+
         http.stop();
     }
 
@@ -120,14 +135,14 @@ public class TestClaimSubmissionHttpServiceWithCustom {
 
         int port = 40001;
 
-        String subscriptionUrl = String.format("http://localhost:%d/pub/claimReceived",port);
+        String subscriptionUrl = String.format("http://localhost:%d/pub/%s",port, ClaimSubmittedEvent.NAME);
 
         HttpResponse<String> subResponse = Unirest.post("http://localhost:8080/sub")
-                .body(new Gson().toJson(new Subscription(subscriptionUrl,"claimReceived")))
+                .body(new Gson().toJson(new Subscription(subscriptionUrl, ClaimSubmittedEvent.NAME)))
                 .asString();
 
         HttpResponse<String> subDeleteResponse = Unirest.delete("http://localhost:8080/sub")
-                .body(new Gson().toJson(new Subscription(subscriptionUrl,"claimReceived")))
+                .body(new Gson().toJson(new Subscription(subscriptionUrl,ClaimSubmittedEvent.NAME)))
                 .asString();
 
         Assert.assertEquals(subDeleteResponse.getCode(), 200);
@@ -136,9 +151,8 @@ public class TestClaimSubmissionHttpServiceWithCustom {
                 .asJson();
 
         JSONArray subs = subGetResponse.getBody().getArray();
-        JSONObject claimReceivedSub = subs.getJSONObject(0);
 
-        Assert.assertEquals(0,claimReceivedSub.getJSONArray("claimReceived").length());
+        Assert.assertEquals(0,subs.length());
 
     }
 }

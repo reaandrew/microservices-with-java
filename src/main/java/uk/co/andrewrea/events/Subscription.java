@@ -1,11 +1,9 @@
-package uk.co.andrewrea;
+package uk.co.andrewrea.events;
 
 /**
  * Created by vagrant on 5/8/16.
  */
 public class Subscription {
-
-    public Subscription(){}
 
     public Subscription(String url, String event){
         this.url = url;
