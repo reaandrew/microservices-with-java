@@ -1,9 +1,9 @@
-package uk.co.andrewrea.domain.models;
+package uk.co.andrewrea.domain.dtos;
 
 /**
  * Created by vagrant on 5/8/16.
  */
-public class Claim {
+public class ClaimDto {
     public String firstname;
     public String surname;
     public String middlenames;

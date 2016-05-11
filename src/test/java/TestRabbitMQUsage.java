@@ -87,7 +87,7 @@ public class TestRabbitMQUsage {
                 .body(new JSONObject(body).toString())
                 .asString();
 
-        //Assert a ClaimSubmittedEvent was published
+        //Expect a ClaimSubmittedEvent was published
         try {
             boolean triggered = signal.await(60, TimeUnit.SECONDS);
             if (!triggered){

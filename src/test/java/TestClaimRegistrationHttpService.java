@@ -105,7 +105,7 @@ public class TestClaimRegistrationHttpService {
                 .body(new JSONObject(body).toString())
                 .asString();
 
-        //Assert a ClaimRegisteredEvent was published
+        //Expect a ClaimRegisteredEvent was published
         try {
             boolean triggered = signal.await(5, TimeUnit.SECONDS);
             if (!triggered){

@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import spark.Service;
 import uk.co.andrewrea.domain.events.ClaimSubmittedEvent;
 import uk.co.andrewrea.events.Publisher;
-import uk.co.andrewrea.domain.models.Claim;
+import uk.co.andrewrea.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/6/16.
@@ -34,7 +34,7 @@ public class ClaimSubmissionHttpService {
     public void start(){
 
         this.service.post("/claims", (req, res) -> {
-            Claim claim = new Gson().fromJson(req.body(), Claim.class);
+            ClaimDto claim = new Gson().fromJson(req.body(), ClaimDto.class);
             res.status(202);
 
             ClaimSubmittedEvent evt = new ClaimSubmittedEvent();

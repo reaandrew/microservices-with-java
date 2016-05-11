@@ -62,8 +62,8 @@ public class TestClaimSubmissionHttpServiceWithHttpPubSub {
     }
 
     @Test
-    public void claimReturnsReceived() throws UnirestException, JSONException {
-
+    public void claimReturnsReceived() throws UnirestException, JSONException, InterruptedException {
+        Thread.sleep(100);
         HashMap body = new SystemUnderTest().getSampleClaim();
 
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:8080/claims")

@@ -64,7 +64,6 @@ public class ClaimRegistrationHttpService {
     }
 
     private void startMessageConsumer() throws IOException, TimeoutException {
-        System.out.println("Started message consumer");
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
         factory.setVirtualHost("/");
@@ -91,7 +90,6 @@ public class ClaimRegistrationHttpService {
                                                        byte[] body)
                                     throws IOException
                             {
-                                System.out.println("Received a message");
                                 ClaimSubmittedEvent evt = new Gson().fromJson(new String(body), ClaimSubmittedEvent.class);
                                 ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
                                 claimRegisteredEvent.id = UUID.randomUUID().toString();
