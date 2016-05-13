@@ -31,4 +31,9 @@ public class RabbitMQPublisher implements Publisher {
 
         channel.basicPublish(exchangeName, eventType, messageProperties, messageBodyBytes);
     }
+
+    public static RabbitMQPublisher create(Channel channel, String exchangeName) throws IOException {
+        channel.exchangeDeclare(exchangeName,"topic",false);
+        return new RabbitMQPublisher(channel, exchangeName);
+    }
 }

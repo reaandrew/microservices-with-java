@@ -27,12 +27,11 @@ public class TestClaimAwardHttpService {
         //ARRANGE
         this.sut.startRabbitMQSystem();
         this.sut.setupExchangeFor(ClaimFraudHttpService.NAME);
-
-        this.sut.setupExchangeFor(ClaimAwardedHttpService.NAME);
+        
         ClaimAwardServiceConfiguration claimAwardServiceConfiguration = new ClaimAwardServiceConfiguration();
         Service server = Service.ignite().port(claimAwardServiceConfiguration.port);
         Channel channel = this.sut.createLocalRabbitMQChannel();
-        Publisher publisher = new RabbitMQPublisher(channel,ClaimAwardedHttpService.NAME);
+        Publisher publisher = RabbitMQPublisher.create(channel,ClaimAwardedHttpService.NAME);
        ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(server, publisher);
         claimAwardedHttpService.start();
 
