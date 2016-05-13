@@ -4,9 +4,14 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import spark.Service;
+import uk.co.andrewrea.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.domain.dtos.AddressDto;
 import uk.co.andrewrea.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.domain.dtos.ClaimDto;
+import uk.co.andrewrea.events.Publisher;
+import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
+import uk.co.andrewrea.services.ClaimFraudHttpService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,5 +101,16 @@ public class SystemUnderTest {
 
         channel.basicPublish(exchangeName, eventType, messageProperties, messageBodyBytes);
         channel.close();
+    }
+
+
+    public ClaimFraudHttpService createClaimFraudService() throws IOException, TimeoutException {
+        this.setupExchangeFor(ClaimFraudHttpService.NAME);
+        ClaimFraudServiceConfiguration fraudServiceConfiguration = new ClaimFraudServiceConfiguration();
+        Channel publisherChannel = this.createLocalRabbitMQChannel();
+        Publisher publisher = new RabbitMQPublisher(publisherChannel, ClaimFraudHttpService.NAME);
+        Service server = Service.ignite().port(fraudServiceConfiguration.port);
+        ClaimFraudHttpService claimFraudService = new ClaimFraudHttpService(server, publisher);
+        return claimFraudService;
     }
 }

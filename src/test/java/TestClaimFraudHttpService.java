@@ -27,14 +27,9 @@ public class TestClaimFraudHttpService {
 
         this.sut.startRabbitMQSystem();
         this.sut.setupExchangeFor(ClaimRegistrationHttpService.NAME);
-        this.sut.setupExchangeFor(ClaimFraudHttpService.NAME);
 
         //ARRANGE
-        ClaimFraudServiceConfiguration fraudServiceConfiguration = new ClaimFraudServiceConfiguration();
-        Channel publisherChannel = this.sut.createLocalRabbitMQChannel();
-        Publisher publisher = new RabbitMQPublisher(publisherChannel, ClaimFraudHttpService.NAME);
-        Service server = Service.ignite().port(fraudServiceConfiguration.port);
-        ClaimFraudHttpService claimFraudService = new ClaimFraudHttpService(server, publisher);
+        ClaimFraudHttpService claimFraudService = this.sut.createClaimFraudService();
         claimFraudService.start();
 
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(sut.createLocalRabbitMQChannel());

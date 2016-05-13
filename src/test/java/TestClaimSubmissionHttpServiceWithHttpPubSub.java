@@ -110,7 +110,7 @@ public class TestClaimSubmissionHttpServiceWithHttpPubSub {
         Assert.assertEquals(subResponse.getCode(), 201);
 
         ClaimDto body = new SystemUnderTest().getSampleClaim();
-
+        Thread.sleep(100);
         Unirest.post("http://localhost:8080/claims")
                 .body(new JSONObject(body).toString())
                 .asString();
