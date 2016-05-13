@@ -1,125 +1,82 @@
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.Channel;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import spark.Service;
-import uk.co.andrewrea.config.ClaimRegistrationConfiguration;
-import uk.co.andrewrea.config.ClaimSubmissionConfiguration;
+import uk.co.andrewrea.config.ClaimConfiguration;
+import uk.co.andrewrea.domain.dtos.ClaimDto;
 import uk.co.andrewrea.domain.events.ClaimRegisteredEvent;
-import uk.co.andrewrea.services.ClaimRegistrationHttpService;
-import uk.co.andrewrea.services.ClaimSubmissionHttpService;
 import uk.co.andrewrea.events.Publisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
+import uk.co.andrewrea.services.ClaimRegistrationHttpService;
+import utils.RabbitMQExpections;
+import utils.TestIdGenerator;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by vagrant on 5/10/16.
+ * Created by vagrant on 5/11/16.
  */
 public class TestClaimRegistrationHttpService {
+    private TestIdGenerator idGenerator = new TestIdGenerator();
+    private SystemUnderTest sut = new SystemUnderTest();
+    private ClaimConfiguration claimServiceConfiguration;
+    private ClaimRegistrationHttpService service;
 
     @Test
-    public void subscribeTo_ClaimSubmittedEvent_andPublish_ClaimRegisteredEvent() throws IOException, TimeoutException, UnirestException {
+    public void publishesClaimRegisteredEvent() throws IOException, UnirestException, TimeoutException, InterruptedException {
 
-        final CountDownLatch signal = new CountDownLatch(1);
+        this.sut.startRabbitMQSystem();
 
-        ClaimSubmissionConfiguration claimSubmissionConfiguration = new ClaimSubmissionConfiguration();
-        ClaimRegistrationConfiguration claimRegistrationConfiguration = new ClaimRegistrationConfiguration();
+        this.sut.setupExchangeFor(ClaimRegistrationHttpService.NAME);
 
-        //Create a connection
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setVirtualHost("/");
-        factory.setHost("localhost");
-        factory.setPort(5672);
-        Connection conn = factory.newConnection();
-        Channel channel = conn.createChannel();
+        this.claimServiceConfiguration = new ClaimConfiguration();
 
-        //Create an exchange
-        channel.exchangeDeclare(ClaimSubmissionHttpService.NAME, "topic", false);
-        channel.exchangeDeclare(ClaimRegistrationHttpService.NAME, "topic", false);
+        Channel channel = this.sut.createLocalRabbitMQChannel();
+        Publisher publisher = new RabbitMQPublisher(channel, ClaimRegistrationHttpService.NAME);
 
-        //Create a rabbitMQ publisher
+        Service http = Service.ignite().port(this.claimServiceConfiguration.port);
+        this.service = new ClaimRegistrationHttpService(this.idGenerator, http, publisher);
+        this.service.start();
 
-        Publisher claimSubmissionPublisher = new RabbitMQPublisher(channel, ClaimSubmissionHttpService.NAME);
+        RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(sut.createLocalRabbitMQChannel());
+        rabbitMQExpectations.ExpectForExchange(ClaimRegistrationHttpService.NAME, messages -> {
+            return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimRegisteredEvent.NAME);
+        });
 
-        //Create a ClaimSubmissionHttpService
-        Service claimSubmissionHttp = Service.ignite().port(claimSubmissionConfiguration.port);
-        ClaimSubmissionHttpService claimSubmissionHttpService = new ClaimSubmissionHttpService(claimSubmissionHttp, claimSubmissionPublisher);
-        claimSubmissionHttpService.start();
+        ClaimDto claim = sut.getSampleClaim();
 
-        //Create a channel
-        Channel registrationChannel = conn.createChannel();
-
-        //Create an exchange
-        channel.exchangeDeclare(ClaimSubmissionHttpService.NAME, "topic", false);
-
-        //Create a rabbitMQ publisher
-
-        Publisher claimRegistrationPublisher = new RabbitMQPublisher(registrationChannel, ClaimRegistrationHttpService.NAME);
-
-        //Create a ClaimRegistrationHttpService
-        Service claimRegisteredHttp = Service.ignite().port(claimRegistrationConfiguration.port);
-        ClaimRegistrationHttpService claimRegistrationHttpService = new ClaimRegistrationHttpService(claimRegisteredHttp, claimRegistrationPublisher);
-        claimRegistrationHttpService.start();
-
-        //Create a queue and bind to the exchange
-        String testQueueName = "TestClaimRegistrationHttpService";
-        channel.queueDeclare(testQueueName,false, true, true, null);
-        channel.queueBind(testQueueName,ClaimRegistrationHttpService.NAME, ClaimRegisteredEvent.NAME);
-
-        //Create a consumer of the queue
-        Runnable consumer = () -> {
-            boolean autoAck = false;
-            try {
-                channel.basicConsume(testQueueName, autoAck,
-                        new DefaultConsumer(channel) {
-                            @Override
-                            public void handleDelivery(String consumerTag,
-                                                       Envelope envelope,
-                                                       AMQP.BasicProperties properties,
-                                                       byte[] body)
-                                    throws IOException
-                            {
-                                //String routingKey = envelope.getRoutingKey();
-                                //String contentType = properties.getContentType();
-                                long deliveryTag = envelope.getDeliveryTag();
-                                channel.basicAck(deliveryTag, false);
-                                signal.countDown();
-                            }
-                        });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
-        consumer.run();
-
-        HashMap body = new SystemUnderTest().getSampleClaim();
-
-        Unirest.post("http://localhost:8080/claims")
-                .body(new JSONObject(body).toString())
+        HttpResponse<String> response = Unirest.post(String.format("http://localhost:%d/claims", this.claimServiceConfiguration.port))
+                .body(new JSONObject(claim).toString())
                 .asString();
 
-        //Expect a ClaimRegisteredEvent was published
+        Assert.assertEquals(202, response.getCode());
+
+
         try {
-            boolean triggered = signal.await(5, TimeUnit.SECONDS);
-            if (!triggered){
-                Assert.fail("Signal was not triggered");
-            }
-        } catch (InterruptedException e) {
-            Assert.fail(e.getMessage());
+            rabbitMQExpectations.VerifyAllExpectations();
+        }
+        finally{
+            this.sut.stopRabbitMQSystem();
+            this.service.stop();
         }
 
-        claimRegistrationHttpService.stop();
-        claimSubmissionHttpService.stop();
-        registrationChannel.close();
-        channel.close();
-        conn.close();
+    }
+
+
+
+    public void publishesClaimAwardedEvent(){
+
+    }
+
+    public void publishesClaimCompletedEvent() {
+
     }
 
 }

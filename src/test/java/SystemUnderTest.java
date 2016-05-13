@@ -1,7 +1,12 @@
 
+import com.google.gson.Gson;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import uk.co.andrewrea.domain.dtos.AddressDto;
+import uk.co.andrewrea.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.domain.dtos.ClaimDto;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,15 +27,32 @@ public class SystemUnderTest {
         this.channels = new ArrayList<>();
     }
 
-    public HashMap getSampleClaim() {
-        HashMap body = new HashMap();
-        body.put("firstname","John");
-        body.put("middlenames","Joseph");
-        body.put("surname", "Doe");
-        body.put("dob","1983/04/21");
-        body.put("nino","AB000000A");
-        body.put("income",21000);
-        return body;
+    public ClaimDto getSampleClaim() {
+
+        ClaimDto claim = new ClaimDto();
+        claim.firstname = "John";
+        claim.middlenames = "Jospeh";
+        claim.surname = "Doe";
+        claim.dob = "1983/04/21";
+        claim.nino = "AB000000A";
+        claim.income = 21000;
+        claim.passportNumber = "123456789";
+
+        BankAccountDto bankAccount = new BankAccountDto();
+        bankAccount.name = "knowles and barclays";
+        bankAccount.number = "87654321";
+        bankAccount.sortCode = "00-00-00";
+        claim.bankAccount = bankAccount;
+
+        AddressDto address = new AddressDto();
+        address.line1 = "10 Some Street";
+        address.line2 = "Some Place";
+        address.town = "Some Town";
+        address.city = "Some City";
+        address.postCode = "XX1 1XX";
+        claim.address = address;
+
+        return claim;
     }
 
     public Channel createLocalRabbitMQChannel() throws IOException {
@@ -61,6 +83,18 @@ public class SystemUnderTest {
     public void setupExchangeFor(String name) throws IOException, TimeoutException {
         Channel channel = this.conn.createChannel();
         channel.exchangeDeclare(name,"topic",false);
+        channel.close();
+    }
+
+    public <T> void publishTo(String exchangeName, String eventType, T message) throws IOException, TimeoutException {
+        Channel channel = this.conn.createChannel();
+        byte[] messageBodyBytes = new Gson().toJson(message).getBytes();
+
+        AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
+                .contentType("application/json")
+                .build();
+
+        channel.basicPublish(exchangeName, eventType, messageProperties, messageBodyBytes);
         channel.close();
     }
 }

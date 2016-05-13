@@ -4,10 +4,10 @@ import uk.co.andrewrea.domain.dtos.AddressDto;
 import uk.co.andrewrea.domain.dtos.BankAccountDto;
 
 /**
- * Created by vagrant on 5/10/16.
+ * Created by vagrant on 5/11/16.
  */
-public class ClaimRegisteredEvent {
-    public static final String NAME = "claim-registered-event";
+public class ClaimVerifiedEvent {
+    public static final String NAME = "claim-verified-event";
 
     public String id;
     public String firstname;

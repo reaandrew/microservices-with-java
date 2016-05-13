@@ -1,9 +1,6 @@
 package utils;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,8 +10,8 @@ import java.util.*;
  */
 public class RabbitMQExpections {
     private Channel channel;
-    private static final Map<String,ArrayList<RabbitMQMessage>> messages = new HashMap<>();
-    private static final Map<String, ArrayList<RabbitMQExpectation>> expectations = new HashMap<>();
+    private final Map<String,ArrayList<RabbitMQMessage>> messages = new HashMap<>();
+    private final Map<String, ArrayList<RabbitMQExpectation>> expectations = new HashMap<>();
 
     public RabbitMQExpections(Channel channel) {
         this.channel = channel;
@@ -30,6 +27,8 @@ public class RabbitMQExpections {
         this.expectations.get(name).add(expectation);
 
         String queueName = UUID.randomUUID().toString();
+        String cTag = UUID.randomUUID().toString();
+        System.out.println(String.format("Queue Name For RabbitMQ Expectations: %s", queueName));
         //Create a queue and bind to the exchange
         channel.queueDeclare(queueName,false, true, true, null);
         channel.queueBind(queueName, name, "*");
@@ -37,7 +36,7 @@ public class RabbitMQExpections {
         Runnable consumer = () -> {
             boolean autoAck = false;
             try {
-                channel.basicConsume(queueName, autoAck,
+                channel.basicConsume(queueName, autoAck, cTag,
                         new DefaultConsumer(channel) {
                             @Override
                             public void handleDelivery(String consumerTag,
@@ -50,7 +49,14 @@ public class RabbitMQExpections {
                                 long deliveryTag = envelope.getDeliveryTag();
                                 channel.basicAck(deliveryTag, false);
                             }
+
+                            @Override
+                            public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) {
+                                super.handleShutdownSignal(consumerTag, sig);
+                                System.out.println(String.format("Shutting Down Consumer tag %s", cTag));
+                            }
                         });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,7 +65,10 @@ public class RabbitMQExpections {
         return this;
     }
 
-    public void VerifyAllExpectations(){
+    public void VerifyAllExpectations() throws InterruptedException {
+        //Breathe, interrupt and let the events propagate
+        Thread.sleep(100);
+
         for(Map.Entry<String, ArrayList<RabbitMQExpectation>> expectationsForExchange : expectations.entrySet()){
             ArrayList<RabbitMQMessage> input = messages.get(expectationsForExchange.getKey());
             for(RabbitMQExpectation expectation : expectationsForExchange.getValue()){
@@ -69,5 +78,6 @@ public class RabbitMQExpections {
             }
         }
     }
+
 
 }

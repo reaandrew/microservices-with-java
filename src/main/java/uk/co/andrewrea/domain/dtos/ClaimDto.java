@@ -10,4 +10,7 @@ public class ClaimDto {
     public String dob;
     public String nino;
     public Integer income;
+    public String passportNumber;
+    public AddressDto address;
+    public BankAccountDto bankAccount;
 }

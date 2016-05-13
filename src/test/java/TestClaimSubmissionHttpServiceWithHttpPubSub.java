@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.junit.*;
 import spark.Service;
 import uk.co.andrewrea.config.ClaimSubmissionConfiguration;
+import uk.co.andrewrea.domain.dtos.ClaimDto;
 import uk.co.andrewrea.domain.events.ClaimSubmittedEvent;
 import uk.co.andrewrea.services.ClaimSubmissionHttpService;
 import uk.co.andrewrea.events.Subscription;
@@ -23,6 +24,7 @@ import static spark.Service.ignite;
 /**
  * Created by vagrant on 5/6/16.
  */
+
 public class TestClaimSubmissionHttpServiceWithHttpPubSub {
 
     private static ClaimSubmissionHttpService service;
@@ -64,7 +66,7 @@ public class TestClaimSubmissionHttpServiceWithHttpPubSub {
     @Test
     public void claimReturnsReceived() throws UnirestException, JSONException, InterruptedException {
         Thread.sleep(100);
-        HashMap body = new SystemUnderTest().getSampleClaim();
+        ClaimDto body = new SystemUnderTest().getSampleClaim();
 
         HttpResponse<JsonNode> response = Unirest.post("http://localhost:8080/claims")
                 .body(new JSONObject(body).toString())
@@ -107,9 +109,9 @@ public class TestClaimSubmissionHttpServiceWithHttpPubSub {
 
         Assert.assertEquals(subResponse.getCode(), 201);
 
-        HashMap body = new SystemUnderTest().getSampleClaim();
+        ClaimDto body = new SystemUnderTest().getSampleClaim();
 
-        HttpResponse<String> claimResponse = Unirest.post("http://localhost:8080/claims")
+        Unirest.post("http://localhost:8080/claims")
                 .body(new JSONObject(body).toString())
                 .asString();
 
