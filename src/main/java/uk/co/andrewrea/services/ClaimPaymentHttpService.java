@@ -3,8 +3,8 @@ package uk.co.andrewrea.services;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
 import spark.Service;
+import uk.co.andrewrea.domain.events.ClaimAwardPaidEvent;
 import uk.co.andrewrea.domain.events.ClaimAwardedEvent;
-import uk.co.andrewrea.domain.events.ClaimRegisteredEvent;
 import uk.co.andrewrea.domain.events.ClaimVerifiedEvent;
 import uk.co.andrewrea.events.Publisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.ConsumingServiceQueueName;
@@ -15,12 +15,12 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by vagrant on 5/13/16.
  */
-public class ClaimAwardedHttpService {
-    public static final String NAME = "claim-awarded-http-service";
+public class ClaimPaymentHttpService {
+    public static final String NAME = "claim-payment-http-service";
     private Service service;
     private Publisher publisher;
 
-    public ClaimAwardedHttpService(Service service, Publisher publisher) {
+    public ClaimPaymentHttpService(Service service, Publisher publisher) {
 
         this.service = service;
         this.publisher = publisher;
@@ -36,9 +36,9 @@ public class ClaimAwardedHttpService {
         Channel channel = conn.createChannel();
 
         //Create a queue and bind to the exchange
-        String queueName = new ConsumingServiceQueueName(ClaimFraudHttpService.NAME, ClaimAwardedHttpService.NAME).toString();
+        String queueName = new ConsumingServiceQueueName(ClaimAwardedHttpService.NAME, ClaimPaymentHttpService.NAME).toString();
         channel.queueDeclare(queueName,false, true, true, null);
-        channel.queueBind(queueName, ClaimFraudHttpService.NAME, ClaimVerifiedEvent.NAME);
+        channel.queueBind(queueName, ClaimAwardedHttpService.NAME, ClaimAwardedEvent.NAME);
 
         //Create a consumer of the queue
         Runnable consumer = () -> {
@@ -53,21 +53,21 @@ public class ClaimAwardedHttpService {
                                                        byte[] body)
                                     throws IOException
                             {
-                                ClaimVerifiedEvent claimVerifiedEvent = new Gson().fromJson(new String(body), ClaimVerifiedEvent.class);
+                                ClaimAwardedEvent claimAwardedEvent = new Gson().fromJson(new String(body), ClaimAwardedEvent.class);
 
-                                ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();
-                                claimAwardedEvent.id = claimVerifiedEvent.id;
-                                claimAwardedEvent.firstname = claimVerifiedEvent.firstname;
-                                claimAwardedEvent.middlenames = claimVerifiedEvent.middlenames;
-                                claimAwardedEvent.surname = claimVerifiedEvent.surname;
-                                claimAwardedEvent.dob = claimVerifiedEvent.dob;
-                                claimAwardedEvent.nino = claimVerifiedEvent.nino;
-                                claimAwardedEvent.income = claimVerifiedEvent.income;
-                                claimAwardedEvent.bankAccount = claimVerifiedEvent.bankAccount;
-                                claimAwardedEvent.address = claimVerifiedEvent.address;
-                                claimAwardedEvent.passportNumber = claimVerifiedEvent.passportNumber;
+                                ClaimAwardPaidEvent claimAwardPaidEvent = new ClaimAwardPaidEvent();
+                                claimAwardPaidEvent.id = claimAwardedEvent.id;
+                                claimAwardPaidEvent.firstname = claimAwardedEvent.firstname;
+                                claimAwardPaidEvent.middlenames = claimAwardedEvent.middlenames;
+                                claimAwardPaidEvent.surname = claimAwardedEvent.surname;
+                                claimAwardPaidEvent.dob = claimAwardedEvent.dob;
+                                claimAwardPaidEvent.income = claimAwardedEvent.income;
+                                claimAwardPaidEvent.nino = claimAwardedEvent.nino;
+                                claimAwardPaidEvent.address = claimAwardedEvent.address;
+                                claimAwardPaidEvent.bankAccount = claimAwardedEvent.bankAccount;
+                                claimAwardPaidEvent.passportNumber = claimAwardedEvent.passportNumber;
 
-                                publisher.publish(claimAwardedEvent, ClaimAwardedEvent.NAME);
+                                publisher.publish(claimAwardPaidEvent, ClaimAwardPaidEvent.NAME);
 
                                 long deliveryTag = envelope.getDeliveryTag();
                                 channel.basicAck(deliveryTag, false);

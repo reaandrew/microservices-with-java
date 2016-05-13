@@ -6,8 +6,8 @@ import uk.co.andrewrea.domain.dtos.BankAccountDto;
 /**
  * Created by vagrant on 5/13/16.
  */
-public class ClaimAwardedEvent {
-    public static final String NAME = "claim-awarded-event";
+public class ClaimAwardPaidEvent {
+    public static final String NAME = "claim-award-paid-event";
 
     public String id;
     public String firstname;

@@ -28,7 +28,7 @@ public class RabbitMQExpections {
 
         String queueName = UUID.randomUUID().toString();
         String cTag = UUID.randomUUID().toString();
-        System.out.println(String.format("Queue Name For RabbitMQ Expectations: %s", queueName));
+
         //Create a queue and bind to the exchange
         channel.queueDeclare(queueName,false, true, true, null);
         channel.queueBind(queueName, name, "*");
@@ -48,12 +48,6 @@ public class RabbitMQExpections {
                                 messages.get(name).add(new RabbitMQMessage(consumerTag,envelope,properties,body));
                                 long deliveryTag = envelope.getDeliveryTag();
                                 channel.basicAck(deliveryTag, false);
-                            }
-
-                            @Override
-                            public void handleShutdownSignal(String consumerTag, ShutdownSignalException sig) {
-                                super.handleShutdownSignal(consumerTag, sig);
-                                System.out.println(String.format("Shutting Down Consumer tag %s", cTag));
                             }
                         });
 

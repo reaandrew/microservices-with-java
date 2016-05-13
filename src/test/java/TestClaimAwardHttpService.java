@@ -27,18 +27,18 @@ public class TestClaimAwardHttpService {
         //ARRANGE
         this.sut.startRabbitMQSystem();
         this.sut.setupExchangeFor(ClaimFraudHttpService.NAME);
-        
+
         ClaimAwardServiceConfiguration claimAwardServiceConfiguration = new ClaimAwardServiceConfiguration();
         Service server = Service.ignite().port(claimAwardServiceConfiguration.port);
         Channel channel = this.sut.createLocalRabbitMQChannel();
-        Publisher publisher = RabbitMQPublisher.create(channel,ClaimAwardedHttpService.NAME);
-       ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(server, publisher);
+        Publisher publisher = RabbitMQPublisher.create(channel, ClaimAwardedHttpService.NAME);
+        ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(server, publisher);
         claimAwardedHttpService.start();
 
         Channel expectationsChannel = this.sut.createLocalRabbitMQChannel();
         RabbitMQExpections expectations = new RabbitMQExpections(expectationsChannel);
         expectations.ExpectForExchange(ClaimAwardedHttpService.NAME, messages -> {
-           return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimAwardedEvent.NAME);
+            return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimAwardedEvent.NAME);
         });
 
         ClaimDto claim = this.sut.getSampleClaim();
@@ -48,7 +48,7 @@ public class TestClaimAwardHttpService {
         claimVerifiedEvent.middlenames = claim.middlenames;
         claimVerifiedEvent.surname = claim.surname;
         claimVerifiedEvent.dob = claim.dob;
-        claimVerifiedEvent.nino  =claim.nino;
+        claimVerifiedEvent.nino = claim.nino;
         claimVerifiedEvent.income = claim.income;
         claimVerifiedEvent.passportNumber = claim.passportNumber;
         claimVerifiedEvent.bankAccount = claim.bankAccount;
@@ -58,9 +58,9 @@ public class TestClaimAwardHttpService {
         this.sut.publishTo(ClaimFraudHttpService.NAME, ClaimVerifiedEvent.NAME, claimVerifiedEvent);
 
         //ASSERT
-        try{
+        try {
             expectations.VerifyAllExpectations();
-        }finally{
+        } finally {
             claimAwardedHttpService.stop();
             this.sut.stopRabbitMQSystem();
         }
