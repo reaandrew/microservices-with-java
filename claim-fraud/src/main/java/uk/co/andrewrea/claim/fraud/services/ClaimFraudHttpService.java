@@ -29,6 +29,8 @@ public class ClaimFraudHttpService {
         factory.setVirtualHost("/");
         factory.setHost(this.config.amqpHost);
         factory.setPort(this.config.amqpPort);
+        factory.setUsername("admin");
+        factory.setPassword("admin");
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 

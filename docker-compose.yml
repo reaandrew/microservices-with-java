@@ -4,3 +4,11 @@ services:
         build: ./claim-award/
         ports: 
         - "8085:8085"
+    claim-communication:
+        build: ./claim-communication/
+        ports:
+        - "8087:8087"
+    claim-fraud:
+        build: ./claim-fraud/
+        ports:
+        - "8084:8084"

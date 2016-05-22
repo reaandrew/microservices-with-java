@@ -27,8 +27,10 @@ public class ClaimCommunicationHttpService {
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
         factory.setVirtualHost("/");
-        factory.setHost("localhost");
-        factory.setPort(5672);
+        factory.setHost(this.config.amqpHost);
+        factory.setPort(this.config.amqpPort);
+        factory.setUsername("admin");
+        factory.setPassword("admin");
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
