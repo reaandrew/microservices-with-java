@@ -67,9 +67,6 @@ public class SystemUnderTest {
 
         ClaimFraudServiceConfiguration fraudServiceConfiguration = new ClaimFraudServiceConfiguration();
         this.rabbitMqFacade.setupTopicExchangeFor(fraudServiceConfiguration.claimFraudServiceExchangeName);
-        Channel publisherChannel = this.rabbitMqFacade.createLocalRabbitMQChannel();
-        Publisher publisher = new RabbitMQPublisher(publisherChannel, fraudServiceConfiguration.claimFraudServiceExchangeName);
-        Service server = Service.ignite().port(fraudServiceConfiguration.port);
-        return new ClaimFraudHttpService(server, publisher, fraudServiceConfiguration);
+        return new ClaimFraudHttpService(fraudServiceConfiguration);
     }
 }
