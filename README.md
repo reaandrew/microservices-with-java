@@ -21,6 +21,22 @@ A system which supports the submission, registration, verification, calculation,
 
 Depending on where you live will affect how much you will be awarded and you must be over the age of 65 to claim.
 
+## Project Dependencies
+
+**Spark** - Micro web framework for Java 8.
+
+**Unirest** - HTTP client library from the folks who made KONG.
+
+**Codehale Metrics** - Metrics library (the main one which other languages has implemented)
+
+**Gson** - JSON library
+
+**RabbitMQ AMQP Client** - AMQP client from RabbitMQ
+
+**Apache Commons CLI** - Command line arguments parser
+
+**Yaml Beans** - YAML library
+
 ## Services
 
 ### Claim Portal
@@ -68,3 +84,25 @@ Claim Payment Service			port: 8086
 Claim Communication Service		port: 8087
 ```
 
+## Characteristics
+
+### Starting the Service
+
+- commons cli
+- using normal command line arguments
+- packging into a single jar using shadow with gradle
+
+### Configuration
+
+- using yaml configuration
+- using environment variables allowing them to be overridden by the command line args
+
+### Common Service Endpoints
+
+- live
+- ready
+
+### Hexaganol Architecture
+
+- ports and adapters
+- hosts, infrastructure, domain, config
