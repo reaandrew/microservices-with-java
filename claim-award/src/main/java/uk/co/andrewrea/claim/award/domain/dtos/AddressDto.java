@@ -1,4 +1,4 @@
-package uk.co.andrewrea.registration.domain.dtos;
+package uk.co.andrewrea.claim.award.domain.dtos;
 
 /**
  * Created by vagrant on 5/11/16.
