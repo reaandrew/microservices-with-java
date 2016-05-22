@@ -1,7 +1,4 @@
-package uk.co.andrewrea.communication.domain.dtos;
-
-import uk.co.andrewrea.communication.domain.dtos.AddressDto;
-import uk.co.andrewrea.communication.domain.dtos.BankAccountDto;
+package uk.co.andrewrea.claim.communication.domain.dtos;
 
 /**
  * Created by vagrant on 5/8/16.

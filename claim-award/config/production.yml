@@ -1,11 +1,7 @@
 ---
-ip: "0.0.0.0"
-port: 8085
-claimAwardServiceExchange:
-  name: "claim-award-service"
-  ip: "127.0.0.1"
-  port: 5672
-claimAwardServiceExchange:
-  name: "claim-fraud-service"
-  ip: "127.0.0.1"
-  port: 5672
+serviceIp: "127.0.0.1"
+servicePort: 8085
+amqpPort: 5672
+amqpHost: "127.0.0.1"
+claimAwardServiceExchangeName: "claim-award-service"
+claimFraudServiceExchangeName: "claim-fraud-service"

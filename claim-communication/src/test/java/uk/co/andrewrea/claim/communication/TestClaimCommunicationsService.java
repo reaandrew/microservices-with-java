@@ -1,12 +1,12 @@
 package uk.co.andrewrea.claim.communication;
 
 import org.junit.*;
-import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
-import uk.co.andrewrea.communication.domain.dtos.ClaimDto;
-import uk.co.andrewrea.communication.domain.events.subscribe.ClaimAwardPaidEvent;
-import uk.co.andrewrea.communication.domain.events.subscribe.ClaimRegisteredEvent;
-import uk.co.andrewrea.communication.infrastructure.inproc.InProcCommunicationService;
-import uk.co.andrewrea.communication.services.ClaimCommunicationHttpService;
+import uk.co.andrewrea.claim.communication.config.ClaimCommunicationServiceConfiguration;
+import uk.co.andrewrea.claim.communication.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.communication.domain.events.subscribe.ClaimAwardPaidEvent;
+import uk.co.andrewrea.claim.communication.domain.events.subscribe.ClaimRegisteredEvent;
+import uk.co.andrewrea.claim.communication.infrastructure.inproc.InProcCommunicationService;
+import uk.co.andrewrea.claim.communication.services.ClaimCommunicationHttpService;
 import uk.co.andrewrea.infrastructure.inproc.StubEmailService;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 

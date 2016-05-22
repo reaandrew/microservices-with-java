@@ -1,6 +1,6 @@
-package uk.co.andrewrea.communication.domain.events.subscribe;
+package uk.co.andrewrea.claim.communication.domain.events.subscribe;
 
-import uk.co.andrewrea.communication.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.communication.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/10/16.

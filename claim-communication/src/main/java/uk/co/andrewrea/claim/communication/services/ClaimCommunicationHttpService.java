@@ -1,12 +1,12 @@
-package uk.co.andrewrea.communication.services;
+package uk.co.andrewrea.claim.communication.services;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
-import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
-import uk.co.andrewrea.communication.domain.core.CommunicationService;
-import uk.co.andrewrea.communication.domain.events.subscribe.ClaimAwardPaidEvent;
-import uk.co.andrewrea.communication.domain.events.subscribe.ClaimRegisteredEvent;
-import uk.co.andrewrea.communication.domain.models.Communication;
+import uk.co.andrewrea.claim.communication.config.ClaimCommunicationServiceConfiguration;
+import uk.co.andrewrea.claim.communication.domain.core.CommunicationService;
+import uk.co.andrewrea.claim.communication.domain.events.subscribe.ClaimAwardPaidEvent;
+import uk.co.andrewrea.claim.communication.domain.events.subscribe.ClaimRegisteredEvent;
+import uk.co.andrewrea.claim.communication.domain.models.Communication;
 
 import java.io.IOException;
 import java.util.Optional;

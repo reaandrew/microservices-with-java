@@ -1,8 +1,8 @@
 package uk.co.andrewrea.claim.communication;
 
-import uk.co.andrewrea.communication.domain.dtos.AddressDto;
-import uk.co.andrewrea.communication.domain.dtos.BankAccountDto;
-import uk.co.andrewrea.communication.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.communication.domain.dtos.AddressDto;
+import uk.co.andrewrea.claim.communication.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.claim.communication.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/9/16.

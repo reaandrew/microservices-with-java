@@ -1,7 +1,7 @@
-package uk.co.andrewrea.communication.infrastructure.inproc;
+package uk.co.andrewrea.claim.communication.infrastructure.inproc;
 
-import uk.co.andrewrea.communication.domain.core.CommunicationService;
-import uk.co.andrewrea.communication.domain.models.Communication;
+import uk.co.andrewrea.claim.communication.domain.core.CommunicationService;
+import uk.co.andrewrea.claim.communication.domain.models.Communication;
 import uk.co.andrewrea.infrastructure.core.EmailService;
 
 import java.util.ArrayList;

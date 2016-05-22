@@ -1,4 +1,4 @@
-package uk.co.andrewrea.communication.domain.dtos;
+package uk.co.andrewrea.claim.communication.domain.dtos;
 
 /**
  * Created by vagrant on 5/11/16.

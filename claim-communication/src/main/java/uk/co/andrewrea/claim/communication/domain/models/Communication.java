@@ -1,4 +1,4 @@
-package uk.co.andrewrea.communication.domain.models;
+package uk.co.andrewrea.claim.communication.domain.models;
 
 /**
  * Created by vagrant on 5/22/16.

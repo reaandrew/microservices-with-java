@@ -1,6 +1,6 @@
-package uk.co.andrewrea.communication.domain.core;
+package uk.co.andrewrea.claim.communication.domain.core;
 
-import uk.co.andrewrea.communication.domain.models.Communication;
+import uk.co.andrewrea.claim.communication.domain.models.Communication;
 
 import java.util.Optional;
 
