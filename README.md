@@ -73,16 +73,16 @@ This service deals with the different forms of communication which are required 
 
 ## Default Configuration
 
-```shell
-Claim Portal				port: 8080 
-Claim Portal Query Service		port: 8081 
-Claim Portal Query Updater Service	port: 8082
-Claim Registration Service		port: 8083
-Claim Fraud Service			port: 8084
-Claim Award Service			port: 8085
-Claim Payment Service			port: 8086
-Claim Communication Service		port: 8087
-```
+|Project|Configuration|
+|---|---|
+|Claim Portal|port: 8080|
+|Claim Portal Query Servicev|port: 8081|
+|Claim Portal Query Updater Service|port: 8082|
+|Claim Registration Service|port: 8083|
+|Claim Fraud Service|port: 8084|
+|Claim Award Service|port: 8085|
+|Claim Payment Service|port: 8086|
+|Claim Communication Service|port: 8087|
 
 ## Characteristics
 
