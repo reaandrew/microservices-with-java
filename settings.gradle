@@ -1,2 +1,9 @@
-rootProject.name = 'with-microservices'
-
+include 'claim-award'
+include 'claim-communication'
+include 'claim-fraud'
+include 'claim-payment'
+include 'claim-portal'
+include 'claim-query'
+include 'claim-query-updater'
+include 'claim-registration'
+include 'infrastructure'

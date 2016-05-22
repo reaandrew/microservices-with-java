@@ -13,3 +13,57 @@ Some of the characteristics of the solution I want to end up with include:
 
 > IMPORTANT 
 > - I want this to be simple to create, understand, explain and extend.
+
+##  Domain
+
+A system which supports the submission, registration, verification, calculation, payment and communication of a claim to a claimant.  There is no definition as to what the claim is for simply only criteria which must be met in order to receive the claim as this is for example only.  
+
+Depending on where you live will affect how much you will be awarded and you must be over the age of 65 to claim.
+
+## Services
+
+**Claim Portal**
+
+The UI
+
+**Claim Portal Query Service**
+
+The `Backend for the Front End` Query Service.  This is the service which the Claim Portal service will use a the Read Service.  This services handles the read concerns of the store.
+
+**Claim Portal Query Updater Service**
+
+This will subscribe to the relevant events which are required to update the Claim Portal read store.  This service handles the write concerns of the store.
+
+**Claim Registration Service**
+
+This service handles the subsmission, duplication checks and registration of new claims and change of circumstances **(NOT CURRENTLY SUPPORTED)**.
+
+**Claim Fraud Service**
+
+This services checks the bank account and passport number supplied match the specified address of the claimant.
+
+**Claim Award Service**
+
+This service calculates the amount the claimant is entitiled to based on the informaiton in the claim
+
+**Claim Payment Service**
+
+This service integrates with payment providers in order to pay the claimant once a claim has been awarded to them.
+
+**Claim Communication Service**
+
+This service deals with the different forms of communication which are required including integration with email and postal gateways.
+
+## Default Configuration
+
+```shell
+Claim Portal				port: 8080 
+Claim Portal Query Service		port: 8081 
+Claim Portal Query Updater Service	port: 8082
+Claim Registration Service		port: 8083
+Claim Fraud Service			port: 8084
+Claim Award Service			port: 8085
+Claim Payment Service			port: 8086
+Claim Communication Service		port: 8087
+```
+
