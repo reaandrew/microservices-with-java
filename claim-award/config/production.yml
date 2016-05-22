@@ -2,6 +2,6 @@
 serviceIp: "127.0.0.1"
 servicePort: 8085
 amqpPort: 5672
-amqpHost: "127.0.0.1"
+amqpHost: "192.168.56.50"
 claimAwardServiceExchangeName: "claim-award-service"
 claimFraudServiceExchangeName: "claim-fraud-service"

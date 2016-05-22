@@ -1,0 +1,6 @@
+version: '2'
+services:
+    claim-award:
+        build: ./claim-award/
+        ports: 
+        - "8085:8085"

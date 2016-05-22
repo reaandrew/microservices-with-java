@@ -15,6 +15,19 @@ Some of the characteristics of the solution I want to end up with include:
 > - I want this to be simple to create, understand, explain and extend.
 > - I want each project to be independent of each other
 
+## Getting Started
+
+To jump straight in you can simply run:
+
+```shell
+make run
+```
+
+The core requirements which need to be in the path are:
+
+- docker
+- java 8 JDK
+
 ##  Domain
 
 A system which supports the submission, registration, verification, calculation, payment and communication of a claim to a claimant.  There is no definition as to what the claim is for simply only criteria which must be met in order to receive the claim as this is for example only.  
