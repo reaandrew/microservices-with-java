@@ -12,7 +12,6 @@ import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
 import uk.co.andrewrea.registration.domain.events.ClaimAwardedEvent;
 import uk.co.andrewrea.registration.domain.events.ClaimVerifiedEvent;
 import uk.co.andrewrea.registration.services.ClaimAwardedHttpService;
-import uk.co.andrewrea.registration.services.ClaimFraudHttpService;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

@@ -34,7 +34,12 @@ project(':claim-registration'){
 		testCompile project(':infrastructure')
 	}
 }
-project(':claim-fraud'){}
+project(':claim-fraud'){
+	dependencies {
+		compile project(':infrastructure')
+		testCompile project(':infrastructure')
+	}
+}
 project(':claim-award'){}
 project(':claim-payment'){
 	dependencies {

@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import rabbitmq.test.RabbitMQExpections;
 import rabbitmq.test.RabbitMQFacadeForTest;
-import uk.co.andrewrea.registration.config.ClaimFraudServiceConfiguration;
-import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;
-import uk.co.andrewrea.registration.domain.events.ClaimVerifiedEvent;
-import uk.co.andrewrea.registration.services.ClaimFraudHttpService;
-import uk.co.andrewrea.registration.services.ClaimRegistrationHttpService;
+import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
+import uk.co.andrewrea.claim.fraud.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.fraud.domain.events.publish.ClaimVerifiedEvent;
+import uk.co.andrewrea.claim.fraud.domain.events.subscribe.ClaimRegisteredEvent;
+import uk.co.andrewrea.claim.fraud.services.ClaimFraudHttpService;
+
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -24,7 +24,7 @@ public class TestClaimFraudHttpService {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
-        this.config = new ClaimFraudServiceConfiguration();
+        this.config = this.sut.getConfiguration();
     }
 
     @After

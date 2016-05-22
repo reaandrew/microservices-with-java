@@ -1,17 +1,8 @@
 
-import com.rabbitmq.client.Channel;
-import spark.Service;
-import uk.co.andrewrea.infrastructure.events.Publisher;
-import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
-import uk.co.andrewrea.registration.config.ClaimFraudServiceConfiguration;
+import rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.registration.domain.dtos.AddressDto;
 import uk.co.andrewrea.registration.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.services.ClaimFraudHttpService;
-import rabbitmq.test.RabbitMQFacadeForTest;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by vagrant on 5/9/16.
@@ -55,14 +46,4 @@ public class SystemUnderTest {
         return claim;
     }
 
-    public ClaimFraudHttpService createClaimFraudService() throws IOException, TimeoutException {
-
-        ClaimFraudServiceConfiguration fraudServiceConfiguration = new ClaimFraudServiceConfiguration();
-        this.rabbitMqFacade.setupTopicExchangeFor(fraudServiceConfiguration.claimFraudServiceExchangeName);
-        Channel publisherChannel = this.rabbitMqFacade.createLocalRabbitMQChannel();
-        Publisher publisher = new RabbitMQPublisher(publisherChannel, fraudServiceConfiguration.claimFraudServiceExchangeName);
-        Service server = Service.ignite().port(fraudServiceConfiguration.port);
-        ClaimFraudHttpService claimFraudService = new ClaimFraudHttpService(server, publisher, fraudServiceConfiguration);
-        return claimFraudService;
-    }
 }

@@ -1,4 +1,4 @@
-package uk.co.andrewrea.registration.config;
+package uk.co.andrewrea.claim.fraud.config;
 
 /**
  * Created by vagrant on 5/13/16.
