@@ -1,4 +1,4 @@
-package uk.co.andrewrea.registration.infrastructure.rabbitmq;
+package uk.co.andrewrea.claim.registration.infrastructure.rabbitmq;
 
 /**
  * Created by vagrant on 5/11/16.

@@ -1,6 +1,6 @@
-package uk.co.andrewrea.registration.domain.events.publish;
+package uk.co.andrewrea.claim.registration.domain.events.publish;
 
-import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.registration.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/10/16.

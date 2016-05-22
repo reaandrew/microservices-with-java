@@ -1,8 +1,8 @@
 package uk.co.andrewrea.claim.registration;
 
-import uk.co.andrewrea.registration.domain.dtos.AddressDto;
-import uk.co.andrewrea.registration.domain.dtos.BankAccountDto;
-import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.registration.domain.dtos.AddressDto;
+import uk.co.andrewrea.claim.registration.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.claim.registration.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/9/16.

@@ -1,0 +1,6 @@
+---
+serviceIp: "127.0.0.1"
+servicePort: 8083
+amqpPort: 5672
+amqpHost: "127.0.0.1"
+claimRegistrationServiceExchangeName: "claim-registration-service"

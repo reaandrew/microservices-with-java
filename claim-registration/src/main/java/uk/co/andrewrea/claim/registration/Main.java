@@ -1,10 +1,10 @@
-package uk.co.andrewrea.claim.payment;
+package uk.co.andrewrea.claim.registration;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import org.apache.commons.cli.*;
-import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
-import uk.co.andrewrea.claim.payment.services.ClaimPaymentHttpService;
+import uk.co.andrewrea.claim.registration.config.ClaimRegistrationConfiguration;
+import uk.co.andrewrea.claim.registration.services.ClaimRegistrationHttpService;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,9 +23,9 @@ public class Main {
             if(cmd.hasOption("c")){
                 String configurationFilePath = cmd.getOptionValue("c");
                 YamlReader reader = new YamlReader(new FileReader(configurationFilePath));
-                ClaimPaymentServiceConfiguration config = reader.read(ClaimPaymentServiceConfiguration.class);
-                ClaimPaymentHttpService claimPaymentHttpService = new ClaimPaymentHttpService(config);
-                claimPaymentHttpService.start();
+                ClaimRegistrationConfiguration config = reader.read(ClaimRegistrationConfiguration.class);
+                ClaimRegistrationHttpService claimRegistrationHttpService = new ClaimRegistrationHttpService(config);
+                claimRegistrationHttpService.start();
             }
         } catch (ParseException e) {
             e.printStackTrace();
