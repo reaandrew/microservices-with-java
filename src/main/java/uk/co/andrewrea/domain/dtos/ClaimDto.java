@@ -13,4 +13,6 @@ public class ClaimDto {
     public String passportNumber;
     public AddressDto address;
     public BankAccountDto bankAccount;
+    public String email;
+    public Boolean receiveEmail;
 }

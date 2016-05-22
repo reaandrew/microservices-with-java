@@ -57,6 +57,9 @@ public class SystemUnderTest {
         address.postCode = "XX1 1XX";
         claim.address = address;
 
+        claim.email = "john@not.exists";
+        claim.receiveEmail = true;
+
         return claim;
     }
 
