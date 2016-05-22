@@ -12,3 +12,7 @@ services:
         build: ./claim-fraud/
         ports:
         - "8084:8084"
+    claim-payment:
+        build: ./claim-payment/
+        ports:
+        - "8086:8086"
