@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.communication;
+
 import org.junit.*;
 import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
 import uk.co.andrewrea.communication.domain.dtos.ClaimDto;

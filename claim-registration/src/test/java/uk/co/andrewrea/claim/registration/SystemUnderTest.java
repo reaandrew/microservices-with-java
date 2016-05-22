@@ -1,3 +1,4 @@
+package uk.co.andrewrea.claim.registration;
 
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.registration.domain.dtos.AddressDto;

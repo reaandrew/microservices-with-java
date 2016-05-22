@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.registration;
+
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -11,7 +13,7 @@ import spark.Service;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.registration.config.ClaimSubmissionConfiguration;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.domain.events.ClaimSubmittedEvent;
+import uk.co.andrewrea.registration.domain.events.publish.ClaimSubmittedEvent;
 import uk.co.andrewrea.registration.services.ClaimSubmissionHttpService;
 import uk.co.andrewrea.registration.events.Subscription;
 import uk.co.andrewrea.registration.infrastructure.http.HttpPubSub;

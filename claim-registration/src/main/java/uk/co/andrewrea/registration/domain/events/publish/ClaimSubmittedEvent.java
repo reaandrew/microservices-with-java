@@ -1,4 +1,4 @@
-package uk.co.andrewrea.registration.domain.events;
+package uk.co.andrewrea.registration.domain.events.publish;
 
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
 

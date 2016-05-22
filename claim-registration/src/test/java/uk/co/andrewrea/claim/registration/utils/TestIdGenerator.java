@@ -1,4 +1,4 @@
-package utils;
+package uk.co.andrewrea.claim.registration.utils;
 
 import uk.co.andrewrea.registration.core.IdGenerator;
 

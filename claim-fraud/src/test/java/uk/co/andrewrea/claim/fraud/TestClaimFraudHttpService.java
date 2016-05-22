@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.fraud;
+
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.After;
 import org.junit.Before;

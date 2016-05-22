@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.registration;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -15,9 +17,9 @@ import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.registration.config.ClaimConfiguration;
 import uk.co.andrewrea.registration.config.ClaimRegistrationConfiguration;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;
+import uk.co.andrewrea.registration.domain.events.publish.ClaimRegisteredEvent;
 import uk.co.andrewrea.registration.services.ClaimRegistrationHttpService;
-import utils.TestIdGenerator;
+import uk.co.andrewrea.claim.registration.utils.TestIdGenerator;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

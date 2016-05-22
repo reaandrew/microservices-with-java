@@ -1,3 +1,4 @@
+package uk.co.andrewrea.claim.payment;
 
 import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
 import uk.co.andrewrea.claim.payment.domain.dtos.AddressDto;

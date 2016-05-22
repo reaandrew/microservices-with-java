@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.fraud;
+
 import com.rabbitmq.client.Channel;
 import spark.Service;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;

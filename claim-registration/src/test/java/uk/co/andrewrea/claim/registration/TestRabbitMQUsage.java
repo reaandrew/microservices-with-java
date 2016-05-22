@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.registration;
+
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rabbitmq.client.*;
@@ -7,11 +9,9 @@ import spark.Service;
 import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
-import uk.co.andrewrea.registration.config.ClaimRegistrationConfiguration;
 import uk.co.andrewrea.registration.config.ClaimSubmissionConfiguration;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;
-import uk.co.andrewrea.registration.services.OldClaimRegistrationHttpService;
+import uk.co.andrewrea.registration.domain.events.publish.ClaimSubmittedEvent;
 import uk.co.andrewrea.registration.services.ClaimSubmissionHttpService;
 
 import java.io.IOException;
@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by vagrant on 5/10/16.
+ * Created by vagrant on 5/9/16.
  */
-public class TestOldClaimRegistrationHttpService {
+public class TestRabbitMQUsage {
 
 
     private SystemUnderTest sut;
@@ -41,12 +41,13 @@ public class TestOldClaimRegistrationHttpService {
     }
 
     @Test
-    public void subscribeTo_ClaimSubmittedEvent_andPublish_ClaimRegisteredEvent() throws IOException, TimeoutException, UnirestException {
+    public void canDoSomething() throws IOException, TimeoutException, UnirestException, InterruptedException {
 
         final CountDownLatch signal = new CountDownLatch(1);
-
-        ClaimSubmissionConfiguration claimSubmissionConfiguration = new ClaimSubmissionConfiguration();
-        ClaimRegistrationConfiguration claimRegistrationConfiguration = new ClaimRegistrationConfiguration();
+        final String queueName = "canDoSomething";
+        final String exchangeName = "sampleService";
+        final String eventType = ClaimSubmittedEvent.NAME;
+        final ClaimSubmissionConfiguration claimSubmissionConfiguration = new ClaimSubmissionConfiguration();
 
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
@@ -57,43 +58,26 @@ public class TestOldClaimRegistrationHttpService {
         Channel channel = conn.createChannel();
 
         //Create an exchange
-        channel.exchangeDeclare(ClaimSubmissionHttpService.NAME, "topic", false);
-        channel.exchangeDeclare(OldClaimRegistrationHttpService.NAME, "topic", false);
+        channel.exchangeDeclare(exchangeName,"topic",false);
 
         //Create a rabbitMQ publisher
 
-        Publisher claimSubmissionPublisher = new RabbitMQPublisher(channel, ClaimSubmissionHttpService.NAME);
+        Publisher rmqPublisher = new RabbitMQPublisher(channel, exchangeName);
 
-        //Create a ClaimSubmissionHttpService
-        Service claimSubmissionHttp = Service.ignite().port(claimSubmissionConfiguration.port);
-        ClaimSubmissionHttpService claimSubmissionHttpService = new ClaimSubmissionHttpService(claimSubmissionHttp, claimSubmissionPublisher);
-        claimSubmissionHttpService.start();
-
-        //Create a channel
-        Channel registrationChannel = conn.createChannel();
-
-        //Create an exchange
-        channel.exchangeDeclare(ClaimSubmissionHttpService.NAME, "topic", false);
-
-        //Create a rabbitMQ publisher
-
-        Publisher claimRegistrationPublisher = new RabbitMQPublisher(registrationChannel, OldClaimRegistrationHttpService.NAME);
-
-        //Create a OldClaimRegistrationHttpService
-        Service claimRegisteredHttp = Service.ignite().port(claimRegistrationConfiguration.port);
-        OldClaimRegistrationHttpService oldClaimRegistrationHttpService = new OldClaimRegistrationHttpService(claimRegisteredHttp, claimRegistrationPublisher);
-        oldClaimRegistrationHttpService.start();
+        //Create a service instance with the rabbitMQ publisher
+        Service http = Service.ignite().port(claimSubmissionConfiguration.port);
+        ClaimSubmissionHttpService claimSubsmissionService = new ClaimSubmissionHttpService(http, rmqPublisher);
+        claimSubsmissionService.start();
 
         //Create a queue and bind to the exchange
-        String testQueueName = "TestOldClaimRegistrationHttpService";
-        channel.queueDeclare(testQueueName,false, true, true, null);
-        channel.queueBind(testQueueName,OldClaimRegistrationHttpService.NAME, ClaimRegisteredEvent.NAME);
+        channel.queueDeclare(queueName,false, true, true, null);
+        channel.queueBind(queueName,exchangeName,eventType);
 
         //Create a consumer of the queue
         Runnable consumer = () -> {
             boolean autoAck = false;
             try {
-                channel.basicConsume(testQueueName, autoAck,
+                channel.basicConsume(queueName, autoAck,
                         new DefaultConsumer(channel) {
                             @Override
                             public void handleDelivery(String consumerTag,
@@ -115,15 +99,17 @@ public class TestOldClaimRegistrationHttpService {
         };
         consumer.run();
 
+        //Submit a new claim
         ClaimDto body = this.sut.getSampleClaim();
 
-        Unirest.post("http://localhost:8080/claims")
+        Thread.sleep(10);
+        Unirest.post(String.format("http://localhost:%d/claims",claimSubmissionConfiguration.port))
                 .body(new JSONObject(body).toString())
                 .asString();
 
-        //Expect a ClaimRegisteredEvent was published
+        //Expect a ClaimSubmittedEvent was published
         try {
-            boolean triggered = signal.await(5, TimeUnit.SECONDS);
+            boolean triggered = signal.await(60, TimeUnit.SECONDS);
             if (!triggered){
                 Assert.fail("Signal was not triggered");
             }
@@ -131,11 +117,9 @@ public class TestOldClaimRegistrationHttpService {
             Assert.fail(e.getMessage());
         }
 
-        oldClaimRegistrationHttpService.stop();
-        claimSubmissionHttpService.stop();
-        registrationChannel.close();
+        claimSubsmissionService.stop();
         channel.close();
         conn.close();
-    }
 
+    }
 }

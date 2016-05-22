@@ -5,7 +5,7 @@ import spark.Service;
 import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.registration.core.IdGenerator;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
-import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;
+import uk.co.andrewrea.registration.domain.events.publish.ClaimRegisteredEvent;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

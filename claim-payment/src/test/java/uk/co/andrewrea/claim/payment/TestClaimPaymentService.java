@@ -1,3 +1,5 @@
+package uk.co.andrewrea.claim.payment;
+
 import com.rabbitmq.client.Channel;
 import org.junit.After;
 import org.junit.Before;

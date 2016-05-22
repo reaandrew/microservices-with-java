@@ -1,3 +1,4 @@
+package uk.co.andrewrea.claim.communication;
 
 import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
 import uk.co.andrewrea.communication.domain.dtos.AddressDto;

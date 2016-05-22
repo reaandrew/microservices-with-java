@@ -5,7 +5,7 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import spark.Service;
 import uk.co.andrewrea.infrastructure.core.Publisher;
-import uk.co.andrewrea.registration.domain.events.ClaimSubmittedEvent;
+import uk.co.andrewrea.registration.domain.events.publish.ClaimSubmittedEvent;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
 
 /**
