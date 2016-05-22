@@ -44,9 +44,8 @@ public class ClaimCommunicationHttpService {
 
         //Create a consumer of the queue
         Runnable consumer = () -> {
-            boolean autoAck = false;
             try {
-                channel.basicConsume(queueName, autoAck,
+                channel.basicConsume(queueName, false,
                         new DefaultConsumer(channel) {
                             @Override
                             public void handleDelivery(String consumerTag,

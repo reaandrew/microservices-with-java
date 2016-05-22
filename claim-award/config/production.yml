@@ -1,0 +1,11 @@
+---
+ip: "0.0.0.0"
+port: 8085
+claimAwardServiceExchange:
+  name: "claim-award-service"
+  ip: "127.0.0.1"
+  port: 5672
+claimAwardServiceExchange:
+  name: "claim-fraud-service"
+  ip: "127.0.0.1"
+  port: 5672

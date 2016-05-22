@@ -1,8 +1,6 @@
 package uk.co.andrewrea.registration.domain.dtos;
 
-/**
- * Created by vagrant on 5/8/16.
- */
+
 public class ClaimDto {
     public String firstname;
     public String surname;

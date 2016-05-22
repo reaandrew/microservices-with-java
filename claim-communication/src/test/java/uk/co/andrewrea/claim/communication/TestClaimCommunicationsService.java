@@ -26,7 +26,7 @@ public class TestClaimCommunicationsService {
     @Before
     public void before() throws IOException, TimeoutException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
-        this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
+        this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimCommunicationServiceConfiguration();
     }

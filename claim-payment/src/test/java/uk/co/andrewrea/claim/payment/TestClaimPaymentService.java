@@ -31,7 +31,7 @@ public class TestClaimPaymentService {
     public void before() throws IOException, TimeoutException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
-        this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
+        this.sut = new SystemUnderTest();
         this.config = this.sut.getConfiguration();
     }
 

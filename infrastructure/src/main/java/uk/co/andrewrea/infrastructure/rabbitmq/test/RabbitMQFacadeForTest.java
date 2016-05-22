@@ -19,8 +19,8 @@ public class RabbitMQFacadeForTest {
 
 
     private Collection<Channel> channels;
-    private final int RABBITMQ_PORT = 5672;
-    private final String RABBITMQ_IP = "localhost";
+    private static final int RABBITMQ_PORT = 5672;
+    private static final String RABBITMQ_IP = "localhost";
 
     public RabbitMQFacadeForTest(){
         this.channels = new ArrayList<>();

@@ -4,19 +4,16 @@ import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
 import uk.co.andrewrea.claim.payment.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.payment.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.payment.domain.dtos.ClaimDto;
-import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 /**
  * Created by vagrant on 5/9/16.
  */
 public class SystemUnderTest {
 
-    private RabbitMQFacadeForTest rabbitMqFacade;
     private ClaimPaymentServiceConfiguration configuration;
 
-    public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade){
+    public SystemUnderTest(){
 
-        this.rabbitMqFacade = rabbitMqFacade;
         this.configuration = new ClaimPaymentServiceConfiguration();
     }
 

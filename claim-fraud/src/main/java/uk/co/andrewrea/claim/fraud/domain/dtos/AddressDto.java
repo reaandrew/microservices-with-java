@@ -1,8 +1,5 @@
 package uk.co.andrewrea.claim.fraud.domain.dtos;
 
-/**
- * Created by vagrant on 5/11/16.
- */
 public class AddressDto {
     public String line1;
     public String line2;

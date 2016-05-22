@@ -19,7 +19,6 @@ import uk.co.andrewrea.registration.config.ClaimRegistrationConfiguration;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
 import uk.co.andrewrea.registration.domain.events.publish.ClaimRegisteredEvent;
 import uk.co.andrewrea.registration.services.ClaimRegistrationHttpService;
-import uk.co.andrewrea.claim.registration.utils.TestIdGenerator;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -28,10 +27,7 @@ import java.util.concurrent.TimeoutException;
  * Created by vagrant on 5/11/16.
  */
 public class TestClaimRegistrationHttpService {
-    private TestIdGenerator idGenerator = new TestIdGenerator();
 
-    private ClaimConfiguration claimServiceConfiguration;
-    private ClaimRegistrationHttpService service;
     private ClaimRegistrationConfiguration config;
 
     private SystemUnderTest sut;
@@ -40,7 +36,7 @@ public class TestClaimRegistrationHttpService {
     @Before
     public void before() throws IOException, TimeoutException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
-        this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
+        this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimRegistrationConfiguration();
     }
@@ -56,14 +52,14 @@ public class TestClaimRegistrationHttpService {
         //TODO: Should not need this as the setup of the service should deal with this.
         this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimRegistrationServiceExchangeName);
 
-        this.claimServiceConfiguration = new ClaimConfiguration();
+        ClaimConfiguration claimServiceConfiguration = new ClaimConfiguration();
 
         Channel channel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
         Publisher publisher = new RabbitMQPublisher(channel, this.config.claimRegistrationServiceExchangeName);
 
-        Service http = Service.ignite().port(this.claimServiceConfiguration.port);
-        this.service = new ClaimRegistrationHttpService(this.idGenerator, http, publisher);
-        this.service.start();
+        Service http = Service.ignite().port(claimServiceConfiguration.port);
+        ClaimRegistrationHttpService service = new ClaimRegistrationHttpService(http, publisher);
+        service.start();
 
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(this.rabbitMQFacadeForTest.createLocalRabbitMQChannel());
         rabbitMQExpectations.ExpectForExchange(this.config.claimRegistrationServiceExchangeName, messages -> {
@@ -72,7 +68,7 @@ public class TestClaimRegistrationHttpService {
 
         ClaimDto claim = sut.getSampleClaim();
 
-        HttpResponse<String> response = Unirest.post(String.format("http://localhost:%d/claims", this.claimServiceConfiguration.port))
+        HttpResponse<String> response = Unirest.post(String.format("http://localhost:%d/claims", claimServiceConfiguration.port))
                 .body(new JSONObject(claim).toString())
                 .asString();
 
@@ -83,7 +79,7 @@ public class TestClaimRegistrationHttpService {
             rabbitMQExpectations.VerifyAllExpectations();
         }
         finally{
-            this.service.stop();
+            service.stop();
         }
 
     }

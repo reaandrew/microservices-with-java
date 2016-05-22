@@ -1,16 +1,10 @@
 package uk.co.andrewrea.claim.award.config;
 
-/**
- * Created by vagrant on 5/13/16.
- */
 public class ClaimAwardServiceConfiguration {
-    public int port;
-    public String claimAwardServiceExchangeName;
-    public String claimFraudServiceExchangeName;
-
-    public ClaimAwardServiceConfiguration(){
-        this.port = 8082;
-        this.claimAwardServiceExchangeName = "claim-award-service";
-        this.claimFraudServiceExchangeName = "claim-fraud-service";
-    }
+    public int servicePort = 8085;
+    public String serviceIp = "127.0.0.1";
+    public int amqpPort = 5672;
+    public String amqpHost = "127.0.0.1";
+    public String claimAwardServiceExchangeName= "claim-award-service";
+    public String claimFraudServiceExchangeName = "claim-fraud-service";
 }

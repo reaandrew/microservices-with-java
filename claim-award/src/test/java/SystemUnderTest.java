@@ -1,19 +1,12 @@
 import uk.co.andrewrea.claim.award.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.award.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.award.domain.dtos.ClaimDto;
-import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 /**
  * Created by vagrant on 5/9/16.
  */
 public class SystemUnderTest {
 
-    private RabbitMQFacadeForTest rabbitMqFacade;
-
-    public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade){
-
-        this.rabbitMqFacade = rabbitMqFacade;
-    }
 
     public ClaimDto getSampleClaim() {
         ClaimDto claim = new ClaimDto();

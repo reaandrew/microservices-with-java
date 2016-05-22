@@ -33,9 +33,8 @@ public class RabbitMQExpections {
         channel.queueBind(queueName, name, "*");
         //Create a consumer of the queue
         Runnable consumer = () -> {
-            boolean autoAck = false;
             try {
-                channel.basicConsume(queueName, autoAck, cTag,
+                channel.basicConsume(queueName, false, cTag,
                         new DefaultConsumer(channel) {
                             @Override
                             public void handleDelivery(String consumerTag,

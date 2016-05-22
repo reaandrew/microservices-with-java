@@ -29,7 +29,7 @@ public class TestClaimAwardHttpService {
     public void before() throws IOException, TimeoutException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
-        this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
+        this.sut = new SystemUnderTest();
         this.config = new ClaimAwardServiceConfiguration();
     }
 
@@ -44,10 +44,7 @@ public class TestClaimAwardHttpService {
         //ARRANGE
         this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimFraudServiceExchangeName);
 
-        Service server = Service.ignite().port(this.config.port);
-        Channel channel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
-        Publisher publisher = RabbitMQPublisher.create(channel, this.config.claimAwardServiceExchangeName);
-        ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(server, publisher, this.config);
+        ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(this.config);
         claimAwardedHttpService.start();
 
         Channel expectationsChannel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();

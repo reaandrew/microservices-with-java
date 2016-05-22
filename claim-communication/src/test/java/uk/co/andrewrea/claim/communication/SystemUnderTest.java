@@ -1,24 +1,13 @@
 package uk.co.andrewrea.claim.communication;
 
-import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
 import uk.co.andrewrea.communication.domain.dtos.AddressDto;
 import uk.co.andrewrea.communication.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.communication.domain.dtos.ClaimDto;
-import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 /**
  * Created by vagrant on 5/9/16.
  */
 public class SystemUnderTest {
-
-    private RabbitMQFacadeForTest rabbitMqFacade;
-    private ClaimCommunicationServiceConfiguration configuration;
-
-    public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade){
-
-        this.rabbitMqFacade = rabbitMqFacade;
-        this.configuration = new ClaimCommunicationServiceConfiguration();
-    }
 
     public ClaimDto getSampleClaim() {
         ClaimDto claim = new ClaimDto();
@@ -50,7 +39,4 @@ public class SystemUnderTest {
         return claim;
     }
 
-    public ClaimCommunicationServiceConfiguration getConfiguration() {
-        return configuration;
-    }
 }

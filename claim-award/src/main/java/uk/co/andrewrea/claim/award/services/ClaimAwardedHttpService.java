@@ -16,21 +16,20 @@ import java.util.concurrent.TimeoutException;
  */
 public class ClaimAwardedHttpService {
     private Service service;
-    private Publisher publisher;
     private ClaimAwardServiceConfiguration config;
 
-    public ClaimAwardedHttpService(Service service, Publisher publisher, ClaimAwardServiceConfiguration config) {
-        this.service = service;
-        this.publisher = publisher;
+    public ClaimAwardedHttpService(ClaimAwardServiceConfiguration config) {
         this.config = config;
     }
 
     public void start() throws IOException, TimeoutException {
+        this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
+
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
         factory.setVirtualHost("/");
-        factory.setHost("localhost");
-        factory.setPort(5672);
+        factory.setHost(this.config.amqpHost);
+        factory.setPort(this.config.amqpPort);
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
@@ -41,9 +40,8 @@ public class ClaimAwardedHttpService {
 
         //Create a consumer of the queue
         Runnable consumer = () -> {
-            boolean autoAck = false;
             try {
-                channel.basicConsume(queueName, autoAck,
+                channel.basicConsume(queueName, false,
                         new DefaultConsumer(channel) {
                             @Override
                             public void handleDelivery(String consumerTag,
@@ -57,7 +55,13 @@ public class ClaimAwardedHttpService {
                                 ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();
                                 claimAwardedEvent.claim = claimVerifiedEvent.claim;
 
-                                publisher.publish(claimAwardedEvent, ClaimAwardedEvent.NAME);
+                                byte[] messageBodyBytes = new Gson().toJson(claimAwardedEvent).getBytes();
+
+                                AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
+                                        .contentType("application/json")
+                                        .build();
+
+                                channel.basicPublish(config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME, messageProperties, messageBodyBytes);
 
                                 long deliveryTag = envelope.getDeliveryTag();
                                 channel.basicAck(deliveryTag, false);
