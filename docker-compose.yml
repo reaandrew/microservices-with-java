@@ -16,3 +16,7 @@ services:
         build: ./claim-payment/
         ports:
         - "8086:8086"
+    claim-registration:
+        build: ./claim-registration/
+        ports:
+        - "8083:8083"

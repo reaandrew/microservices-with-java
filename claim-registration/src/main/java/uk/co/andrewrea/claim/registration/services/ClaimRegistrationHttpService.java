@@ -45,6 +45,8 @@ public class ClaimRegistrationHttpService {
         factory.setVirtualHost("/");
         factory.setHost(this.config.amqpHost);
         factory.setPort(this.config.amqpPort);
+        factory.setUsername(this.config.amqpUsername);
+        factory.setPassword(this.config.amqpPassword);
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 

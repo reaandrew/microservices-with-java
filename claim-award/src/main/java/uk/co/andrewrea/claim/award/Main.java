@@ -25,6 +25,7 @@ public class Main {
                 YamlReader reader = new YamlReader(new FileReader(configurationFilePath));
                 ClaimAwardServiceConfiguration config = reader.read(ClaimAwardServiceConfiguration.class);
                 ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(config);
+
                 claimAwardedHttpService.start();
             }
         } catch (ParseException e) {

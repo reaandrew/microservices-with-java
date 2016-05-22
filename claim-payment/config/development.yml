@@ -3,5 +3,7 @@ serviceIp: "127.0.0.1"
 servicePort: 8086
 amqpPort: 5672
 amqpHost: "192.168.56.50"
+amqpUsername: "admin"
+amqpPassword: "admin"
 claimAwardedServiceExchangeName: "claim-awarded-service"
 claimPaymentServiceExchangeName: "claim-payment-service"

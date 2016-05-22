@@ -8,6 +8,8 @@ public class ClaimCommunicationServiceConfiguration {
     public String serviceIp = "127.0.0.1";
     public int amqpPort = 5672;
     public String amqpHost = "127.0.0.1";
+    public String amqpUsername;
+    public String amqpPassword;
 
     public String claimPaymentServiceExchangeName= "claim-payment-service";
     public String claimCommunicationServiceExchangeName= "claim-communication-service";

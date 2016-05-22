@@ -17,16 +17,18 @@ Some of the characteristics of the solution I want to end up with include:
 
 ## Getting Started
 
+The core requirements which need to be in the path are:
+
+- docker
+- java 8 JDK
+
+You will need an instance of RabbitMQ running somewhere and you must set the connection details for each project inside `config/development.yml`.
+
 To jump straight in you can simply run:
 
 ```shell
 make run
 ```
-
-The core requirements which need to be in the path are:
-
-- docker
-- java 8 JDK
 
 ##  Domain
 

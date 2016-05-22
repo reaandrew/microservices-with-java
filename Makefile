@@ -7,4 +7,7 @@ run: base-docker
 	docker-compose build
 	docker-compose up
 
+#line-cout:
+	#echo "LOC" && echo "-----" && for i in `ls ./ | grep claim-`; do echo "${i} $(cd ${i} && find ./ -type f | grep java$ | xargs cat | wc -l)"; done;
+
 .PHONY: base-docker 

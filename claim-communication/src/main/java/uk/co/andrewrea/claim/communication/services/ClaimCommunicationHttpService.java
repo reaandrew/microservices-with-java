@@ -1,7 +1,10 @@
 package uk.co.andrewrea.claim.communication.services;
 
+import com.codahale.metrics.health.HealthCheck;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
+import spark.Service;
 import uk.co.andrewrea.claim.communication.config.ClaimCommunicationServiceConfiguration;
 import uk.co.andrewrea.claim.communication.domain.core.CommunicationService;
 import uk.co.andrewrea.claim.communication.domain.events.subscribe.ClaimAwardPaidEvent;
@@ -16,21 +19,46 @@ import java.util.concurrent.TimeoutException;
 public class ClaimCommunicationHttpService {
     private CommunicationService communicationService;
     private ClaimCommunicationServiceConfiguration config;
+    private final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
+    private Service service;
 
     public ClaimCommunicationHttpService(CommunicationService communicationService, ClaimCommunicationServiceConfiguration config){
-
         this.communicationService = communicationService;
         this.config = config;
+        this.healthChecks.register("application", new HealthCheck() {
+            @Override
+            protected Result check() throws Exception {
+                return Result.healthy();
+            }
+        });
     }
 
     public void start() throws IOException, TimeoutException {
+        this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
+
+        this.service.get("/info",(req,res) -> {
+            res.status(200);
+            return "";
+        } );
+
+        this.service.get("/health",(req,res) -> {
+            res.status(200);
+
+            return new Gson().toJson(healthChecks.runHealthChecks().values());
+        } );
+
+        this.service.get("/metrics",(req,res) -> {
+            res.status(200);
+            return "";
+        } );
+
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
         factory.setVirtualHost("/");
         factory.setHost(this.config.amqpHost);
         factory.setPort(this.config.amqpPort);
-        factory.setUsername("admin");
-        factory.setPassword("admin");
+        factory.setUsername(this.config.amqpUsername);
+        factory.setPassword(this.config.amqpPassword);
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
