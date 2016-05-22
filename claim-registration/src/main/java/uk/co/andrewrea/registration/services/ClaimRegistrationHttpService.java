@@ -2,7 +2,7 @@ package uk.co.andrewrea.registration.services;
 
 import com.google.gson.Gson;
 import spark.Service;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.registration.core.IdGenerator;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;
 import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;

@@ -6,7 +6,7 @@ import spark.Service;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.claim.fraud.domain.events.publish.ClaimVerifiedEvent;
 import uk.co.andrewrea.claim.fraud.domain.events.subscribe.ClaimRegisteredEvent;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

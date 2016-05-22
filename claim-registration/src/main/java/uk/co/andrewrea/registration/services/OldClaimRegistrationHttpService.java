@@ -5,7 +5,7 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
 import spark.Service;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.registration.domain.events.ClaimRegisteredEvent;
 import uk.co.andrewrea.registration.domain.events.ClaimSubmittedEvent;
 

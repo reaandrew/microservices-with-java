@@ -1,13 +1,13 @@
 import com.rabbitmq.client.Channel;
-import rabbitmq.test.RabbitMQFacadeForTest;
 import spark.Service;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.claim.fraud.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.fraud.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.fraud.domain.dtos.ClaimDto;
 import uk.co.andrewrea.claim.fraud.services.ClaimFraudHttpService;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
+import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

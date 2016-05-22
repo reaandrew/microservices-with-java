@@ -1,5 +1,5 @@
 
-import rabbitmq.test.RabbitMQFacadeForTest;
+import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.registration.domain.dtos.AddressDto;
 import uk.co.andrewrea.registration.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.registration.domain.dtos.ClaimDto;

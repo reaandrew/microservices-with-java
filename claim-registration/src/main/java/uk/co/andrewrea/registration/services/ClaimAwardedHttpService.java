@@ -3,11 +3,10 @@ package uk.co.andrewrea.registration.services;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
 import spark.Service;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.registration.config.ClaimAwardServiceConfiguration;
 import uk.co.andrewrea.registration.domain.events.ClaimAwardedEvent;
 import uk.co.andrewrea.registration.domain.events.ClaimVerifiedEvent;
-import uk.co.andrewrea.registration.infrastructure.rabbitmq.ConsumingServiceQueueName;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

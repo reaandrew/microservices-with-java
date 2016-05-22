@@ -3,7 +3,7 @@ package uk.co.andrewrea.infrastructure.rabbitmq;
 import com.google.gson.Gson;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 
 import java.io.IOException;
 

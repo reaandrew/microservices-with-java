@@ -3,7 +3,7 @@ package uk.co.andrewrea.registration.infrastructure.http;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import uk.co.andrewrea.infrastructure.events.Publisher;
+import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.registration.events.Subscription;
 
 import java.io.IOException;

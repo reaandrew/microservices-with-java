@@ -2,13 +2,13 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import rabbitmq.test.RabbitMQExpections;
-import rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.claim.fraud.domain.dtos.ClaimDto;
 import uk.co.andrewrea.claim.fraud.domain.events.publish.ClaimVerifiedEvent;
 import uk.co.andrewrea.claim.fraud.domain.events.subscribe.ClaimRegisteredEvent;
 import uk.co.andrewrea.claim.fraud.services.ClaimFraudHttpService;
+import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQExpections;
+import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 
 import java.io.IOException;

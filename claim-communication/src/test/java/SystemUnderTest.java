@@ -1,8 +1,8 @@
 
-import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
-import uk.co.andrewrea.claim.payment.domain.dtos.AddressDto;
-import uk.co.andrewrea.claim.payment.domain.dtos.BankAccountDto;
-import uk.co.andrewrea.claim.payment.domain.dtos.ClaimDto;
+import uk.co.andrewrea.communication.config.ClaimCommunicationServiceConfiguration;
+import uk.co.andrewrea.communication.domain.dtos.AddressDto;
+import uk.co.andrewrea.communication.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.communication.domain.dtos.ClaimDto;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 /**
@@ -11,12 +11,12 @@ import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 public class SystemUnderTest {
 
     private RabbitMQFacadeForTest rabbitMqFacade;
-    private ClaimPaymentServiceConfiguration configuration;
+    private ClaimCommunicationServiceConfiguration configuration;
 
     public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade){
 
         this.rabbitMqFacade = rabbitMqFacade;
-        this.configuration = new ClaimPaymentServiceConfiguration();
+        this.configuration = new ClaimCommunicationServiceConfiguration();
     }
 
     public ClaimDto getSampleClaim() {
@@ -49,7 +49,7 @@ public class SystemUnderTest {
         return claim;
     }
 
-    public ClaimPaymentServiceConfiguration getConfiguration() {
+    public ClaimCommunicationServiceConfiguration getConfiguration() {
         return configuration;
     }
 }

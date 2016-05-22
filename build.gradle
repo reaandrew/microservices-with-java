@@ -47,7 +47,12 @@ project(':claim-payment'){
 		testCompile project(':infrastructure')
 	}
 }
-project(':claim-communication'){}
+project(':claim-communication'){
+	dependencies {
+		compile project(':infrastructure')
+		testCompile project(':infrastructure')
+	}
+}
 project(':claim-portal'){}
 project(':claim-query'){}
 project(':claim-query-updater'){}

@@ -13,6 +13,7 @@ Some of the characteristics of the solution I want to end up with include:
 
 > IMPORTANT 
 > - I want this to be simple to create, understand, explain and extend.
+> - I want each project to be independent of each other
 
 ##  Domain
 
