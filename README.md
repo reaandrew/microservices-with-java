@@ -23,35 +23,35 @@ Depending on where you live will affect how much you will be awarded and you mus
 
 ## Services
 
-**Claim Portal**
+### Claim Portal
 
 The UI
 
-**Claim Portal Query Service**
+### Claim Portal Query Service
 
 The `Backend for the Front End` Query Service.  This is the service which the Claim Portal service will use a the Read Service.  This services handles the read concerns of the store.
 
-**Claim Portal Query Updater Service**
+### Claim Portal Query Updater Service
 
 This will subscribe to the relevant events which are required to update the Claim Portal read store.  This service handles the write concerns of the store.
 
-**Claim Registration Service**
+### Claim Registration Service
 
 This service handles the subsmission, duplication checks and registration of new claims and change of circumstances **(NOT CURRENTLY SUPPORTED)**.
 
-**Claim Fraud Service**
+### Claim Fraud Service
 
 This services checks the bank account and passport number supplied match the specified address of the claimant.
 
-**Claim Award Service**
+### Claim Award Service
 
 This service calculates the amount the claimant is entitiled to based on the informaiton in the claim
 
-**Claim Payment Service**
+### Claim Payment Service
 
 This service integrates with payment providers in order to pay the claimant once a claim has been awarded to them.
 
-**Claim Communication Service**
+### Claim Communication Service
 
 This service deals with the different forms of communication which are required including integration with email and postal gateways.
 
