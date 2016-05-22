@@ -16,22 +16,21 @@ import java.util.concurrent.TimeoutException;
  */
 public class ClaimPaymentHttpService {
     private Service service;
-    private Publisher publisher;
     private ClaimPaymentServiceConfiguration config;
 
-    public ClaimPaymentHttpService(Service service, Publisher publisher, ClaimPaymentServiceConfiguration config) {
+    public ClaimPaymentHttpService(ClaimPaymentServiceConfiguration config) {
 
-        this.service = service;
-        this.publisher = publisher;
         this.config = config;
     }
 
     public void start() throws IOException, TimeoutException {
+        this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
+
         //Create a connection
         ConnectionFactory factory = new ConnectionFactory();
         factory.setVirtualHost("/");
-        factory.setHost("localhost");
-        factory.setPort(5672);
+        factory.setHost(this.config.amqpHost);
+        factory.setPort(this.config.amqpPort);
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
@@ -58,7 +57,13 @@ public class ClaimPaymentHttpService {
                                 claimAwardPaidEvent.id = claimAwardedEvent.id;
                                 claimAwardPaidEvent.claim = claimAwardedEvent.claim;
 
-                                publisher.publish(claimAwardPaidEvent, ClaimAwardPaidEvent.NAME);
+                                byte[] messageBodyBytes = new Gson().toJson(claimAwardPaidEvent).getBytes();
+
+                                AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
+                                        .contentType("application/json")
+                                        .build();
+
+                                channel.basicPublish(config.claimPaymentServiceExchangeName, claimAwardPaidEvent.NAME, messageProperties, messageBodyBytes);
 
                                 long deliveryTag = envelope.getDeliveryTag();
                                 channel.basicAck(deliveryTag, false);

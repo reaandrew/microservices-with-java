@@ -1,6 +1,5 @@
 package uk.co.andrewrea.claim.payment;
 
-import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
 import uk.co.andrewrea.claim.payment.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.payment.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.payment.domain.dtos.ClaimDto;
@@ -10,12 +9,6 @@ import uk.co.andrewrea.claim.payment.domain.dtos.ClaimDto;
  */
 public class SystemUnderTest {
 
-    private ClaimPaymentServiceConfiguration configuration;
-
-    public SystemUnderTest(){
-
-        this.configuration = new ClaimPaymentServiceConfiguration();
-    }
 
     public ClaimDto getSampleClaim() {
         ClaimDto claim = new ClaimDto();
@@ -45,9 +38,5 @@ public class SystemUnderTest {
         claim.receiveEmail = true;
 
         return claim;
-    }
-
-    public ClaimPaymentServiceConfiguration getConfiguration() {
-        return configuration;
     }
 }

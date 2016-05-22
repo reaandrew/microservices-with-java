@@ -5,14 +5,11 @@ package uk.co.andrewrea.claim.payment.config;
  */
 public class ClaimPaymentServiceConfiguration {
 
-    public int port;
+    public int servicePort = 8086;
+    public String serviceIp = "127.0.0.1";
+    public int amqpPort = 5672;
+    public String amqpHost = "127.0.0.1";
+    public String claimAwardedServiceExchangeName = "claim-awarded-service";
+    public String claimPaymentServiceExchangeName = "claim-payment-service";
 
-    public String claimAwardedServiceExchangeName;
-    public String claimPaymentServiceExchangeName;
-
-    public ClaimPaymentServiceConfiguration(){
-        this.port = 8083;
-        this.claimAwardedServiceExchangeName = "claim-awarded-service";
-        this.claimPaymentServiceExchangeName = "claim-payment-service";
-    }
 }
