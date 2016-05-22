@@ -58,18 +58,8 @@ public class TestClaimCommunicationsService {
         String claimId = "someClaimId";
 
         ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
-        claimRegisteredEvent.dob = claim.dob;
         claimRegisteredEvent.id = claimId;
-        claimRegisteredEvent.income = claim.income;
-        claimRegisteredEvent.nino = claim.nino;
-        claimRegisteredEvent.surname = claim.surname;
-        claimRegisteredEvent.middlenames = claim.middlenames;
-        claimRegisteredEvent.firstname = claim.firstname;
-        claimRegisteredEvent.address = claim.address;
-        claimRegisteredEvent.bankAccount = claim.bankAccount;
-        claimRegisteredEvent.passportNumber = claim.passportNumber;
-        claimRegisteredEvent.email = claim.email;
-        claimRegisteredEvent.receiveEmail = claim.receiveEmail;
+        claimRegisteredEvent.claim = claim;
 
         this.sut.publishTo(ClaimRegistrationHttpService.NAME, ClaimRegisteredEvent.NAME, claimRegisteredEvent);
 

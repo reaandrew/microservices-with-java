@@ -59,7 +59,7 @@ public class ClaimCommunicationHttpService {
                             {
                                 ClaimRegisteredEvent claimRegisteredEvent = new Gson().fromJson(new String(body), ClaimRegisteredEvent.class);
 
-                                Communication communication = new Communication(claimRegisteredEvent.id,claimRegisteredEvent.email);
+                                Communication communication = new Communication(claimRegisteredEvent.id,claimRegisteredEvent.claim.email);
                                 communicationService.save(communication);
 
                                 long deliveryTag = envelope.getDeliveryTag();

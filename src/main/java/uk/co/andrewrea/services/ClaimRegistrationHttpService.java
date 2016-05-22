@@ -35,12 +35,7 @@ public class ClaimRegistrationHttpService {
             ClaimDto claim = new Gson().fromJson(req.body(), ClaimDto.class);
             ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
             claimRegisteredEvent.id = this.idGenerator.generateID();
-            claimRegisteredEvent.firstname = claim.firstname;
-            claimRegisteredEvent.middlenames = claim.middlenames;
-            claimRegisteredEvent.surname = claim.surname;
-            claimRegisteredEvent.dob = claim.dob;
-            claimRegisteredEvent.nino = claim.nino;
-            claimRegisteredEvent.income = claim.income;
+            claimRegisteredEvent.claim = claim;
 
 
             publisher.publish(claimRegisteredEvent, ClaimRegisteredEvent.NAME);

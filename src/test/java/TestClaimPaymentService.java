@@ -44,15 +44,7 @@ public class TestClaimPaymentService {
         ClaimDto claim = this.sut.getSampleClaim();
         ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();
         claimAwardedEvent.id = "someId";
-        claimAwardedEvent.firstname = claim.firstname;
-        claimAwardedEvent.middlenames = claim.middlenames;
-        claimAwardedEvent.surname = claim.surname;
-        claimAwardedEvent.dob = claim.dob;
-        claimAwardedEvent.nino = claim.nino;
-        claimAwardedEvent.income = claim.income;
-        claimAwardedEvent.address = claim.address;
-        claimAwardedEvent.bankAccount = claim.bankAccount;
-        claimAwardedEvent.passportNumber = claim.passportNumber;
+        claimAwardedEvent.claim = claim;
 
         this.sut.publishTo(ClaimAwardedHttpService.NAME, ClaimAwardedEvent.NAME, claimAwardedEvent);
 

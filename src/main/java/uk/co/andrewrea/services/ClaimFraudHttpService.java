@@ -55,16 +55,7 @@ public class ClaimFraudHttpService {
                             {
                                 ClaimRegisteredEvent claimRegisteredEvent = new Gson().fromJson(new String(body), ClaimRegisteredEvent.class);
                                 ClaimVerifiedEvent claimVerifiedEvent = new ClaimVerifiedEvent();
-                                claimVerifiedEvent.firstname = claimRegisteredEvent.firstname;
-                                claimVerifiedEvent.middlenames = claimRegisteredEvent.middlenames;
-                                claimVerifiedEvent.surname = claimRegisteredEvent.surname;
-                                claimVerifiedEvent.dob = claimRegisteredEvent.dob;
-                                claimVerifiedEvent.id = claimRegisteredEvent.id;
-                                claimVerifiedEvent.income = claimRegisteredEvent.income;
-                                claimVerifiedEvent.nino = claimRegisteredEvent.nino;
-                                claimVerifiedEvent.address = claimRegisteredEvent.address;
-                                claimVerifiedEvent.bankAccount = claimRegisteredEvent.bankAccount;
-                                claimVerifiedEvent.passportNumber = claimRegisteredEvent.passportNumber;
+                                claimVerifiedEvent.claim = claimRegisteredEvent.claim;
 
                                 publisher.publish(claimVerifiedEvent, ClaimVerifiedEvent.NAME);
 

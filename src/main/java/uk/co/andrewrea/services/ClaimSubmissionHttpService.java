@@ -38,12 +38,7 @@ public class ClaimSubmissionHttpService {
             res.status(202);
 
             ClaimSubmittedEvent evt = new ClaimSubmittedEvent();
-            evt.firstname = claim.firstname;
-            evt.middlenames = claim.middlenames;
-            evt.surname = claim.surname;
-            evt.dob = claim.dob;
-            evt.nino = claim.nino;
-            evt.income = claim.income;
+            evt.claim = claim;
 
             this.publisher.publish(evt, ClaimSubmittedEvent.NAME);
 

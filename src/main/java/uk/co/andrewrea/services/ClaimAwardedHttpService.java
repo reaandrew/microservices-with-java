@@ -56,16 +56,7 @@ public class ClaimAwardedHttpService {
                                 ClaimVerifiedEvent claimVerifiedEvent = new Gson().fromJson(new String(body), ClaimVerifiedEvent.class);
 
                                 ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();
-                                claimAwardedEvent.id = claimVerifiedEvent.id;
-                                claimAwardedEvent.firstname = claimVerifiedEvent.firstname;
-                                claimAwardedEvent.middlenames = claimVerifiedEvent.middlenames;
-                                claimAwardedEvent.surname = claimVerifiedEvent.surname;
-                                claimAwardedEvent.dob = claimVerifiedEvent.dob;
-                                claimAwardedEvent.nino = claimVerifiedEvent.nino;
-                                claimAwardedEvent.income = claimVerifiedEvent.income;
-                                claimAwardedEvent.bankAccount = claimVerifiedEvent.bankAccount;
-                                claimAwardedEvent.address = claimVerifiedEvent.address;
-                                claimAwardedEvent.passportNumber = claimVerifiedEvent.passportNumber;
+                                claimAwardedEvent.claim = claimVerifiedEvent.claim;
 
                                 publisher.publish(claimAwardedEvent, ClaimAwardedEvent.NAME);
 

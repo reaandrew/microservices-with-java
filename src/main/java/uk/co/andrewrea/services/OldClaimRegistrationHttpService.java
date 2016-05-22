@@ -93,12 +93,7 @@ public class OldClaimRegistrationHttpService {
                                 ClaimSubmittedEvent evt = new Gson().fromJson(new String(body), ClaimSubmittedEvent.class);
                                 ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
                                 claimRegisteredEvent.id = UUID.randomUUID().toString();
-                                claimRegisteredEvent.firstname = evt.firstname;
-                                claimRegisteredEvent.middlenames = evt.middlenames;
-                                claimRegisteredEvent.surname = evt.surname;
-                                claimRegisteredEvent.dob = evt.dob;
-                                claimRegisteredEvent.nino = evt.nino;
-                                claimRegisteredEvent.income = evt.income;
+                                claimRegisteredEvent.claim = evt.claim;
 
                                 publisher.publish(claimRegisteredEvent, ClaimRegisteredEvent.NAME);
 

@@ -43,16 +43,8 @@ public class TestClaimFraudHttpService {
 
         //ACT
         ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
-        claimRegisteredEvent.dob = claim.dob;
         claimRegisteredEvent.id = "someClaimId";
-        claimRegisteredEvent.income = claim.income;
-        claimRegisteredEvent.nino = claim.nino;
-        claimRegisteredEvent.surname = claim.surname;
-        claimRegisteredEvent.middlenames = claim.middlenames;
-        claimRegisteredEvent.firstname = claim.firstname;
-        claimRegisteredEvent.address = claim.address;
-        claimRegisteredEvent.bankAccount = claim.bankAccount;
-        claimRegisteredEvent.passportNumber = claim.passportNumber;
+        claimRegisteredEvent.claim = claim;
 
         this.sut.publishTo(ClaimRegistrationHttpService.NAME, ClaimRegisteredEvent.NAME, claimRegisteredEvent);
 

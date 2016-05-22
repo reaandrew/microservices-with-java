@@ -44,15 +44,7 @@ public class TestClaimAwardHttpService {
         ClaimDto claim = this.sut.getSampleClaim();
         ClaimVerifiedEvent claimVerifiedEvent = new ClaimVerifiedEvent();
         claimVerifiedEvent.id = "somseId";
-        claimVerifiedEvent.firstname = claim.firstname;
-        claimVerifiedEvent.middlenames = claim.middlenames;
-        claimVerifiedEvent.surname = claim.surname;
-        claimVerifiedEvent.dob = claim.dob;
-        claimVerifiedEvent.nino = claim.nino;
-        claimVerifiedEvent.income = claim.income;
-        claimVerifiedEvent.passportNumber = claim.passportNumber;
-        claimVerifiedEvent.bankAccount = claim.bankAccount;
-        claimVerifiedEvent.address = claim.address;
+        claimVerifiedEvent.claim = claim;
 
         //ACT
         this.sut.publishTo(ClaimFraudHttpService.NAME, ClaimVerifiedEvent.NAME, claimVerifiedEvent);

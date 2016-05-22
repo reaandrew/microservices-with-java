@@ -57,15 +57,7 @@ public class ClaimPaymentHttpService {
 
                                 ClaimAwardPaidEvent claimAwardPaidEvent = new ClaimAwardPaidEvent();
                                 claimAwardPaidEvent.id = claimAwardedEvent.id;
-                                claimAwardPaidEvent.firstname = claimAwardedEvent.firstname;
-                                claimAwardPaidEvent.middlenames = claimAwardedEvent.middlenames;
-                                claimAwardPaidEvent.surname = claimAwardedEvent.surname;
-                                claimAwardPaidEvent.dob = claimAwardedEvent.dob;
-                                claimAwardPaidEvent.income = claimAwardedEvent.income;
-                                claimAwardPaidEvent.nino = claimAwardedEvent.nino;
-                                claimAwardPaidEvent.address = claimAwardedEvent.address;
-                                claimAwardPaidEvent.bankAccount = claimAwardedEvent.bankAccount;
-                                claimAwardPaidEvent.passportNumber = claimAwardedEvent.passportNumber;
+                                claimAwardPaidEvent.claim = claimAwardedEvent.claim;
 
                                 publisher.publish(claimAwardPaidEvent, ClaimAwardPaidEvent.NAME);
 

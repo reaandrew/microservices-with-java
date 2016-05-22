@@ -1,7 +1,6 @@
 package uk.co.andrewrea.domain.events;
 
-import uk.co.andrewrea.domain.dtos.AddressDto;
-import uk.co.andrewrea.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.domain.dtos.ClaimDto;
 
 /**
  * Created by vagrant on 5/10/16.
@@ -9,14 +8,5 @@ import uk.co.andrewrea.domain.dtos.BankAccountDto;
 public class ClaimSubmittedEvent {
     public static final String NAME = "claim-submitted-event";
 
-    public String firstname;
-    public String surname;
-    public String middlenames;
-    public String dob;
-    public String nino;
-    public Integer income;
-    public AddressDto address;
-    public BankAccountDto bankAccount;
-    public String email;
-    public Boolean receiveEmail;
+    public ClaimDto claim;
 }
