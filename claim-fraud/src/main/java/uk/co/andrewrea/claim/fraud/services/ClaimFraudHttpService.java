@@ -59,6 +59,9 @@ public class ClaimFraudHttpService {
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
+        //Create the host exchange
+        channel.exchangeDeclare(this.config.claimFraudServiceExchangeName,"topic", false);
+
         //Create a queue and bind to the exchange
         String queueName = String.format("%s.%s",this.config.claimRegistrationServiceExchangeName, this.config.claimFraudServiceExchangeName);
         channel.queueDeclare(queueName,false, true, true, null);

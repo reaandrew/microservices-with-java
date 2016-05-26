@@ -29,6 +29,8 @@ public class TestClaimCommunicationsService {
         this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimCommunicationServiceConfiguration();
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
     }
 
     @After
@@ -51,10 +53,8 @@ public class TestClaimCommunicationsService {
         //Create a ClaimService which currently will be the InProc one
         InProcCommunicationService communicationService = new InProcCommunicationService(stubEmailService);
 
-        ClaimCommunicationServiceConfiguration config = new ClaimCommunicationServiceConfiguration();
-
         //Create the Claim Communication Service
-        ClaimCommunicationHttpService claimCommunicationHttpService = new ClaimCommunicationHttpService(communicationService, config);
+        ClaimCommunicationHttpService claimCommunicationHttpService = new ClaimCommunicationHttpService(communicationService, this.config);
         claimCommunicationHttpService.start();
 
         //Publish a ClaimRegisteredEvent for the communications service to know

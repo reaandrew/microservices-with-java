@@ -60,6 +60,9 @@ public class ClaimAwardedHttpService {
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
+        //Create the host exchange
+        channel.exchangeDeclare(this.config.claimAwardServiceExchangeName,"topic", false);
+
         //Create a queue and bind to the exchange
         String queueName = String.format("%s.%s",this.config.claimFraudServiceExchangeName, this.config.claimAwardServiceExchangeName);
         channel.queueDeclare(queueName,false, true, true, null);

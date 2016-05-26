@@ -50,6 +50,9 @@ public class ClaimRegistrationHttpService {
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
+        //Create the host exchange
+        channel.exchangeDeclare(this.config.claimRegistrationServiceExchangeName,"topic", false);
+
         this.service.post("claims", (req, res) -> {
             ClaimDto claim = new Gson().fromJson(req.body(), ClaimDto.class);
             ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();

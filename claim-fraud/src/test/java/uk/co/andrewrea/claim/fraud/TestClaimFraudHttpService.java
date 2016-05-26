@@ -27,6 +27,8 @@ public class TestClaimFraudHttpService {
         this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = this.sut.getConfiguration();
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
     }
 
     @After
@@ -40,7 +42,8 @@ public class TestClaimFraudHttpService {
         this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimRegistrationServiceExchangeName);
 
         //ARRANGE
-        ClaimFraudHttpService claimFraudService = this.sut.createClaimFraudService();
+        ClaimFraudHttpService claimFraudService = new ClaimFraudHttpService(this.config);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimFraudServiceExchangeName);
         claimFraudService.start();
 
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(this.rabbitMQFacadeForTest.createLocalRabbitMQChannel());

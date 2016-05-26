@@ -13,6 +13,7 @@ import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQExpections;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
@@ -31,6 +32,8 @@ public class TestClaimAwardHttpService {
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.sut = new SystemUnderTest();
         this.config = new ClaimAwardServiceConfiguration();
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
     }
 
     @After

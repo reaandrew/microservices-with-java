@@ -25,12 +25,16 @@ public class TestClaimPaymentService {
 
     private RabbitMQFacadeForTest rabbitMQFacadeForTest;
     private SystemUnderTest sut;
+    private ClaimPaymentServiceConfiguration config;
 
     @Before
     public void before() throws IOException, TimeoutException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.sut = new SystemUnderTest();
+        this.config = new ClaimPaymentServiceConfiguration();
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
     }
 
     @After
@@ -40,17 +44,16 @@ public class TestClaimPaymentService {
 
     @Test
     public void publishesClaimAwardPaidEvent() throws IOException, InterruptedException, TimeoutException {
-        ClaimPaymentServiceConfiguration claimPaymentServiceConfiguration = new ClaimPaymentServiceConfiguration();
 
-        this.rabbitMQFacadeForTest.setupTopicExchangeFor(claimPaymentServiceConfiguration.claimAwardedServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimAwardedServiceExchangeName);
 
 
-        ClaimPaymentHttpService claimPaymentHttpService = new ClaimPaymentHttpService(claimPaymentServiceConfiguration);
+        ClaimPaymentHttpService claimPaymentHttpService = new ClaimPaymentHttpService(this.config);
         claimPaymentHttpService.start();
 
         Channel expectationsChannel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
         RabbitMQExpections expectations = new RabbitMQExpections(expectationsChannel);
-        expectations.ExpectForExchange(claimPaymentServiceConfiguration.claimPaymentServiceExchangeName,messages -> {
+        expectations.ExpectForExchange(this.config.claimPaymentServiceExchangeName,messages -> {
            return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimAwardPaidEvent.NAME);
         });
 
@@ -59,7 +62,7 @@ public class TestClaimPaymentService {
         claimAwardedEvent.id = "someId";
         claimAwardedEvent.claim = claim;
 
-        this.rabbitMQFacadeForTest.publishAsJson(claimPaymentServiceConfiguration.claimAwardedServiceExchangeName, ClaimAwardedEvent.NAME, claimAwardedEvent);
+        this.rabbitMQFacadeForTest.publishAsJson(this.config.claimAwardedServiceExchangeName, ClaimAwardedEvent.NAME, claimAwardedEvent);
 
         try{
             expectations.VerifyAllExpectations();

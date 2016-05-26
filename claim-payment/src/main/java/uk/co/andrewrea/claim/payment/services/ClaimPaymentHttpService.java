@@ -60,6 +60,9 @@ public class ClaimPaymentHttpService {
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
+        //Create the host exchange
+        channel.exchangeDeclare(this.config.claimPaymentServiceExchangeName,"topic", false);
+
         //Create a queue and bind to the exchange
         String queueName = String.format("%s.%s",this.config.claimAwardedServiceExchangeName, this.config.claimPaymentServiceExchangeName);
         channel.queueDeclare(queueName,false, true, true, null);

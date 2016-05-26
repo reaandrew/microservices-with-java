@@ -66,7 +66,7 @@ public class SystemUnderTest {
     public ClaimFraudHttpService createClaimFraudService() throws IOException, TimeoutException {
 
         ClaimFraudServiceConfiguration fraudServiceConfiguration = new ClaimFraudServiceConfiguration();
-        this.rabbitMqFacade.setupTopicExchangeFor(fraudServiceConfiguration.claimFraudServiceExchangeName);
+
         return new ClaimFraudHttpService(fraudServiceConfiguration);
     }
 }

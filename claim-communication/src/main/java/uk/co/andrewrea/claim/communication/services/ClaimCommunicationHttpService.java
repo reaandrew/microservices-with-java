@@ -62,6 +62,9 @@ public class ClaimCommunicationHttpService {
         Connection conn = factory.newConnection();
         Channel channel = conn.createChannel();
 
+        //Create the host exchange
+        channel.exchangeDeclare(this.config.claimCommunicationServiceExchangeName,"topic", false);
+
         runRegistrationConsumer(channel);
         runPaymentConsumer(channel);
     }

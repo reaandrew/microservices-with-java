@@ -38,6 +38,8 @@ public class TestClaimRegistrationHttpService {
         this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimRegistrationConfiguration();
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
     }
 
     @After
@@ -51,9 +53,7 @@ public class TestClaimRegistrationHttpService {
         //TODO: Should not need this as the setup of the service should deal with this.
         this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimRegistrationServiceExchangeName);
 
-        ClaimRegistrationConfiguration config = new ClaimRegistrationConfiguration();
-
-        ClaimRegistrationHttpService service = new ClaimRegistrationHttpService(config);
+        ClaimRegistrationHttpService service = new ClaimRegistrationHttpService(this.config);
         service.start();
 
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(this.rabbitMQFacadeForTest.createLocalRabbitMQChannel());

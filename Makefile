@@ -3,6 +3,7 @@ base-docker:
 	docker build -t reaandrew/java8-alpine scripts/docker/reaandrew/java8-alpine
 
 run: base-docker
+	./gradlew test
 	./gradlew shadowJar
 	docker-compose build
 	docker-compose up
