@@ -11,7 +11,7 @@ public class ClaimPaymentServiceConfiguration {
     public String amqpHost = "127.0.0.1";
     public String amqpUsername;
     public String amqpPassword;
-    public String claimAwardedServiceExchangeName = "claim-awarded-service";
+    public String claimAwardServiceExchangeName = "claim-award-service";
     public String claimPaymentServiceExchangeName = "claim-payment-service";
 
 }

@@ -58,14 +58,18 @@ public class RabbitMQFacadeForTest {
     }
 
     public <T> void publishAsJson(String exchangeName, String routingKey, T message) throws IOException, TimeoutException {
-        Channel channel = this.conn.createChannel();
-        byte[] messageBodyBytes = new Gson().toJson(message).getBytes();
+        Channel channel = null;
 
-        AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
-                .contentType("application/json")
-                .build();
+            channel = this.conn.createChannel();
+            byte[] messageBodyBytes = new Gson().toJson(message).getBytes();
 
-        channel.basicPublish(exchangeName, routingKey, messageProperties, messageBodyBytes);
-        channel.close();
+            AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
+                    .contentType("application/json")
+                    .build();
+
+            channel.basicPublish(exchangeName, routingKey, messageProperties, messageBodyBytes);
+            channel.close();
+
+
     }
 }

@@ -36,6 +36,9 @@ public class Main {
         } catch (TimeoutException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("GOT IT");
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

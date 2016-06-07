@@ -1,5 +1,6 @@
 package uk.co.andrewrea.claim.registration;
 
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -38,6 +39,7 @@ public class TestClaimRegistrationHttpService {
         this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimRegistrationConfiguration();
+        this.config.amqpHost = "localhost";
         this.config.amqpUsername = "admin";
         this.config.amqpPassword = "admin";
     }
@@ -63,8 +65,12 @@ public class TestClaimRegistrationHttpService {
 
         ClaimDto claim = sut.getSampleClaim();
 
+        String jsonBody = new Gson().toJson(claim).toString();
+
+        System.out.println(jsonBody);
+
         HttpResponse<String> response = Unirest.post(String.format("http://localhost:%d/claims", config.servicePort))
-                .body(new JSONObject(claim).toString())
+                .body(jsonBody)
                 .asString();
 
         Assert.assertEquals(202, response.getCode());

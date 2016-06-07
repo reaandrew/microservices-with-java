@@ -8,6 +8,7 @@ import spark.Service;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.claim.fraud.domain.events.publish.ClaimVerifiedEvent;
 import uk.co.andrewrea.claim.fraud.domain.events.subscribe.ClaimRegisteredEvent;
+import uk.co.andrewrea.infrastructure.inproc.Retry;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -31,6 +32,8 @@ public class ClaimFraudHttpService {
     }
 
     public void start() throws IOException, TimeoutException {
+        startRabbitMQ();
+
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
         this.service.get("/info",(req,res) -> {
@@ -49,14 +52,22 @@ public class ClaimFraudHttpService {
             return "";
         } );
 
+    }
+
+    private void startRabbitMQ() throws IOException, TimeoutException {
         //Create a connection
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setVirtualHost("/");
-        factory.setHost(this.config.amqpHost);
-        factory.setPort(this.config.amqpPort);
-        factory.setUsername(this.config.amqpUsername);
-        factory.setPassword(this.config.amqpPassword);
-        Connection conn = factory.newConnection();
+        Connection conn = Retry.io(() -> {
+            //Create a connection
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setVirtualHost("/");
+            factory.setHost(this.config.amqpHost);
+            factory.setPort(this.config.amqpPort);
+            factory.setUsername(this.config.amqpUsername);
+            factory.setPassword(this.config.amqpPassword);
+            factory.setAutomaticRecoveryEnabled(true);
+
+            return factory.newConnection();
+        });
         Channel channel = conn.createChannel();
 
         //Create the host exchange
@@ -64,7 +75,7 @@ public class ClaimFraudHttpService {
 
         //Create a queue and bind to the exchange
         String queueName = String.format("%s.%s",this.config.claimRegistrationServiceExchangeName, this.config.claimFraudServiceExchangeName);
-        channel.queueDeclare(queueName,false, true, true, null);
+        channel.queueDeclare(queueName,false, false, false, null);
         channel.queueBind(queueName, this.config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME);
 
         //Create a consumer of the queue

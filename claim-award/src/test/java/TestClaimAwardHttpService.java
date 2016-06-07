@@ -64,9 +64,10 @@ public class TestClaimAwardHttpService {
         //ACT
         this.rabbitMQFacadeForTest.publishAsJson(this.config.claimFraudServiceExchangeName, ClaimVerifiedEvent.NAME, claimVerifiedEvent);
 
+        expectations.VerifyAllExpectations();
         //ASSERT
         try {
-            expectations.VerifyAllExpectations();
+
         } finally {
             claimAwardedHttpService.stop();
         }

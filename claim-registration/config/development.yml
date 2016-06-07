@@ -1,5 +1,5 @@
 ---
-serviceIp: "127.0.0.1"
+serviceIp: "0.0.0.0"
 servicePort: 8083
 amqpPort: 5672
 amqpHost: "192.168.56.50"

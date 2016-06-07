@@ -9,6 +9,7 @@ import uk.co.andrewrea.claim.payment.config.ClaimPaymentServiceConfiguration;
 import uk.co.andrewrea.claim.payment.domain.events.publish.ClaimAwardPaidEvent;
 import uk.co.andrewrea.claim.payment.domain.events.subscribe.ClaimAwardedEvent;
 import uk.co.andrewrea.infrastructure.core.Publisher;
+import uk.co.andrewrea.infrastructure.inproc.Retry;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -32,6 +33,8 @@ public class ClaimPaymentHttpService {
     }
 
     public void start() throws IOException, TimeoutException {
+        startRabbitMQ();
+
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
         this.service.get("/info",(req,res) -> {
@@ -50,23 +53,31 @@ public class ClaimPaymentHttpService {
             return "";
         } );
 
+    }
+
+    private void startRabbitMQ() throws IOException, TimeoutException {
         //Create a connection
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setVirtualHost("/");
-        factory.setHost(this.config.amqpHost);
-        factory.setPort(this.config.amqpPort);
-        factory.setUsername(this.config.amqpUsername);
-        factory.setPassword(this.config.amqpPassword);
-        Connection conn = factory.newConnection();
+        Connection conn = Retry.io(() -> {
+            //Create a connection
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setVirtualHost("/");
+            factory.setHost(this.config.amqpHost);
+            factory.setPort(this.config.amqpPort);
+            factory.setUsername(this.config.amqpUsername);
+            factory.setPassword(this.config.amqpPassword);
+            factory.setAutomaticRecoveryEnabled(true);
+
+            return factory.newConnection();
+        });
         Channel channel = conn.createChannel();
 
         //Create the host exchange
         channel.exchangeDeclare(this.config.claimPaymentServiceExchangeName,"topic", false);
 
         //Create a queue and bind to the exchange
-        String queueName = String.format("%s.%s",this.config.claimAwardedServiceExchangeName, this.config.claimPaymentServiceExchangeName);
-        channel.queueDeclare(queueName,false, true, true, null);
-        channel.queueBind(queueName, this.config.claimAwardedServiceExchangeName, ClaimAwardedEvent.NAME);
+        String queueName = String.format("%s.%s",this.config.claimAwardServiceExchangeName, this.config.claimPaymentServiceExchangeName);
+        channel.queueDeclare(queueName,false, false, false, null);
+        channel.queueBind(queueName, this.config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME);
 
         //Create a consumer of the queue
         Runnable consumer = () -> {

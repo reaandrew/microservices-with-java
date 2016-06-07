@@ -5,5 +5,5 @@ amqpPort: 5672
 amqpHost: "192.168.56.50"
 amqpUsername: "admin"
 amqpPassword: "admin"
-claimAwardedServiceExchangeName: "claim-awarded-service"
+claimAwardServiceExchangeName: "claim-award-service"
 claimPaymentServiceExchangeName: "claim-payment-service"

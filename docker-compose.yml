@@ -3,20 +3,20 @@ services:
     claim-award:
         build: ./claim-award/
         ports: 
-        - "8085:8085"
+          - "8085:8085"
     claim-communication:
         build: ./claim-communication/
         ports:
-        - "8087:8087"
+          - "8087:8087"
     claim-fraud:
         build: ./claim-fraud/
         ports:
-        - "8084:8084"
+          - "8084:8084"
     claim-payment:
         build: ./claim-payment/
         ports:
-        - "8086:8086"
+          - "8086:8086"
     claim-registration:
         build: ./claim-registration/
         ports:
-        - "8083:8083"
+          - "8083:8083"

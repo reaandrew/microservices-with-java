@@ -45,7 +45,7 @@ public class TestClaimPaymentService {
     @Test
     public void publishesClaimAwardPaidEvent() throws IOException, InterruptedException, TimeoutException {
 
-        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimAwardedServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimAwardServiceExchangeName);
 
 
         ClaimPaymentHttpService claimPaymentHttpService = new ClaimPaymentHttpService(this.config);
@@ -62,7 +62,7 @@ public class TestClaimPaymentService {
         claimAwardedEvent.id = "someId";
         claimAwardedEvent.claim = claim;
 
-        this.rabbitMQFacadeForTest.publishAsJson(this.config.claimAwardedServiceExchangeName, ClaimAwardedEvent.NAME, claimAwardedEvent);
+        this.rabbitMQFacadeForTest.publishAsJson(this.config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME, claimAwardedEvent);
 
         try{
             expectations.VerifyAllExpectations();
