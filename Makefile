@@ -4,6 +4,11 @@ compile:
 
 dist: compile
 	./gradlew shadowJar
+
+quickDist:
+	./gradlew compileJava
+	./gradlew shadowJar
+
     	 
 base-docker:
 	#FROM: https://github.com/anapsix/docker-alpine-java

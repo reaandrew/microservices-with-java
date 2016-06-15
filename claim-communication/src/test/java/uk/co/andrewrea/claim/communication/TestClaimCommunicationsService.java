@@ -57,6 +57,8 @@ public class TestClaimCommunicationsService {
         ClaimCommunicationHttpService claimCommunicationHttpService = new ClaimCommunicationHttpService(communicationService, this.config);
         claimCommunicationHttpService.start();
 
+        Thread.sleep(500);
+
         //Publish a ClaimRegisteredEvent for the communications service to know
         //  how the claimant would like to be contacted.
         // - Setting Email = true

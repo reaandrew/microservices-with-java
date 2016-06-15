@@ -3,6 +3,7 @@ package uk.co.andrewrea.claim.portal.services;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
+import org.slf4j.LoggerFactory;
 import spark.ModelAndView;
 import spark.Service;
 import spark.Spark;
@@ -43,6 +44,11 @@ public class ClaimPortalHttpService {
             map.put("name", "Sam");
             return new ModelAndView(map,"claim-form.hbs");
         }, new HandlebarsTemplateEngine());
+
+        this.service.exception(Exception.class, (exception, request, response) -> {
+            // Handle the exception here
+             LoggerFactory.getLogger(this.getClass()).error("An exception occurred", exception);
+        });
 
         this.service.get("/info", (req, res) -> {
             res.status(200);
