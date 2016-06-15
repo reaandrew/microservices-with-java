@@ -15,7 +15,6 @@ public class SystemUnderTest {
         claim.middlenames = "Jospeh";
         claim.surname = "Doe";
         claim.dob = "1983/04/21";
-        claim.nino = "AB000000A";
         claim.income = 21000;
         claim.passportNumber = "123456789";
 

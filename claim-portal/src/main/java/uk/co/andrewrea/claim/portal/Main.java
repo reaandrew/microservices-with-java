@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
+
+
+    //TODO: Generate some test data which have the national insurance numbers but we dont ask for it in the UI
     public static void main(String[] args) {
 
         Options options = new Options();

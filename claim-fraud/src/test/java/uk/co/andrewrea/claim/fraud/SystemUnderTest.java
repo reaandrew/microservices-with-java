@@ -1,14 +1,10 @@
 package uk.co.andrewrea.claim.fraud;
 
-import com.rabbitmq.client.Channel;
-import spark.Service;
 import uk.co.andrewrea.claim.fraud.config.ClaimFraudServiceConfiguration;
 import uk.co.andrewrea.claim.fraud.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.fraud.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.fraud.domain.dtos.ClaimDto;
 import uk.co.andrewrea.claim.fraud.services.ClaimFraudHttpService;
-import uk.co.andrewrea.infrastructure.core.Publisher;
-import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 
 import java.io.IOException;
@@ -34,7 +30,6 @@ public class SystemUnderTest {
         claim.middlenames = "Jospeh";
         claim.surname = "Doe";
         claim.dob = "1983/04/21";
-        claim.nino = "AB000000A";
         claim.income = 21000;
         claim.passportNumber = "123456789";
 
