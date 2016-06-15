@@ -9,6 +9,8 @@ import java.util.Optional;
  */
 public interface CommunicationService {
     void save(Communication communication);
+
     void send(Communication communication);
+
     Optional<Communication> getByClaimId(String claimId);
 }

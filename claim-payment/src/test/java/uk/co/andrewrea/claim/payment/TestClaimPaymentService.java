@@ -51,10 +51,13 @@ public class TestClaimPaymentService {
         ClaimPaymentHttpService claimPaymentHttpService = new ClaimPaymentHttpService(this.config);
         claimPaymentHttpService.start();
 
+        //Wait for the server to start
+        Thread.sleep(500);
+
         Channel expectationsChannel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
         RabbitMQExpections expectations = new RabbitMQExpections(expectationsChannel);
-        expectations.ExpectForExchange(this.config.claimPaymentServiceExchangeName,messages -> {
-           return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimAwardPaidEvent.NAME);
+        expectations.ExpectForExchange(this.config.claimPaymentServiceExchangeName, messages -> {
+            return messages.size() == 1 && messages.get(0).envelope.getRoutingKey().equals(ClaimAwardPaidEvent.NAME);
         });
 
         ClaimDto claim = this.sut.getSampleClaim();
@@ -64,9 +67,9 @@ public class TestClaimPaymentService {
 
         this.rabbitMQFacadeForTest.publishAsJson(this.config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME, claimAwardedEvent);
 
-        try{
+        try {
             expectations.VerifyAllExpectations();
-        }finally{
+        } finally {
             claimPaymentHttpService.stop();
         }
     }

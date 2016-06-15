@@ -10,22 +10,22 @@ public class AmqpExchange {
     public int port;
     public String ip;
 
-    public AmqpExchange(){
+    public AmqpExchange() {
         this.port = 5672;
         this.ip = "127.0.0.1";
     }
 
-    public AmqpExchange(String name){
+    public AmqpExchange(String name) {
         this();
         this.name = name;
     }
 
-    public AmqpExchange(String name, String ip){
+    public AmqpExchange(String name, String ip) {
         this(name);
         this.ip = ip;
     }
 
-    public AmqpExchange(String name, String ip, int port){
+    public AmqpExchange(String name, String ip, int port) {
         this(name, ip);
         this.port = port;
     }

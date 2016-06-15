@@ -39,21 +39,21 @@ public class ClaimAwardedHttpService {
 
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
-        this.service.get("/info",(req,res) -> {
+        this.service.get("/info", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
-        this.service.get("/health",(req,res) -> {
+        this.service.get("/health", (req, res) -> {
             res.status(200);
 
             return new Gson().toJson(healthChecks.runHealthChecks().values());
-        } );
+        });
 
-        this.service.get("/metrics",(req,res) -> {
+        this.service.get("/metrics", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
     }
 
@@ -74,11 +74,11 @@ public class ClaimAwardedHttpService {
         Channel channel = conn.createChannel();
 
         //Create the host exchange
-        channel.exchangeDeclare(this.config.claimAwardServiceExchangeName,"topic", false);
+        channel.exchangeDeclare(this.config.claimAwardServiceExchangeName, "topic", false);
 
         //Create a queue and bind to the exchange
-        String queueName = String.format("%s.%s",this.config.claimFraudServiceExchangeName, this.config.claimAwardServiceExchangeName);
-        channel.queueDeclare(queueName,false, false, false, null);
+        String queueName = String.format("%s.%s", this.config.claimFraudServiceExchangeName, this.config.claimAwardServiceExchangeName);
+        channel.queueDeclare(queueName, false, false, false, null);
         channel.queueBind(queueName, this.config.claimFraudServiceExchangeName, ClaimVerifiedEvent.NAME);
 
         //Create a consumer of the queue
@@ -91,8 +91,7 @@ public class ClaimAwardedHttpService {
                                                        Envelope envelope,
                                                        AMQP.BasicProperties properties,
                                                        byte[] body)
-                                    throws IOException
-                            {
+                                    throws IOException {
                                 ClaimVerifiedEvent claimVerifiedEvent = new Gson().fromJson(new String(body), ClaimVerifiedEvent.class);
 
                                 ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();

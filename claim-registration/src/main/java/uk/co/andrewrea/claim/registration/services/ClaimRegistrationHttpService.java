@@ -51,9 +51,9 @@ public class ClaimRegistrationHttpService {
             return factory.newConnection();
         });
 
-        Channel channel= conn.createChannel();
+        Channel channel = conn.createChannel();
         //Create the host exchange
-        channel.exchangeDeclare(this.config.claimRegistrationServiceExchangeName,"topic", false);
+        channel.exchangeDeclare(this.config.claimRegistrationServiceExchangeName, "topic", false);
 
         this.service.post("claims", (req, res) -> {
             ClaimDto claim = new Gson().fromJson(req.body(), ClaimDto.class);
@@ -73,21 +73,21 @@ public class ClaimRegistrationHttpService {
             return "";
         });
 
-        this.service.get("/info",(req,res) -> {
+        this.service.get("/info", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
-        this.service.get("/health",(req,res) -> {
+        this.service.get("/health", (req, res) -> {
             res.status(200);
 
             return new Gson().toJson(healthChecks.runHealthChecks().values());
-        } );
+        });
 
-        this.service.get("/metrics",(req,res) -> {
+        this.service.get("/metrics", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
     }
 
     public void stop() {

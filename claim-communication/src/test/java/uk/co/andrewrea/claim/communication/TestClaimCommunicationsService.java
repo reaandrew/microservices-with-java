@@ -78,7 +78,7 @@ public class TestClaimCommunicationsService {
 
         Thread.sleep(100);
         //Expect the Email API Service is invoked
-        Assert.assertTrue(stubEmailService.emailSent(claim.email,"Claim has been sent"));
+        Assert.assertTrue(stubEmailService.emailSent(claim.email, "Claim has been sent"));
 
     }
 }

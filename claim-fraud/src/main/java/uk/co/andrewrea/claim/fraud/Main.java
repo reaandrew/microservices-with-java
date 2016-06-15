@@ -12,15 +12,15 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         Options options = new Options();
         options.addOption("c", "config", true, "the yaml configuration file for the service");
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd;
         try {
-            cmd = parser.parse( options, args);
-            if(cmd.hasOption("c")){
+            cmd = parser.parse(options, args);
+            if (cmd.hasOption("c")) {
                 String configurationFilePath = cmd.getOptionValue("c");
                 YamlReader reader = new YamlReader(new FileReader(configurationFilePath));
                 ClaimFraudServiceConfiguration config = reader.read(ClaimFraudServiceConfiguration.class);

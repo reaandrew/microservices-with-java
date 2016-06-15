@@ -46,6 +46,9 @@ public class TestClaimFraudHttpService {
         this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimFraudServiceExchangeName);
         claimFraudService.start();
 
+        //Wait for the server to start
+        Thread.sleep(500);
+
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(this.rabbitMQFacadeForTest.createLocalRabbitMQChannel());
 
         rabbitMQExpectations.ExpectForExchange(this.config.claimFraudServiceExchangeName, messages -> messages.stream().filter(rabbitMQMessage ->
@@ -60,11 +63,10 @@ public class TestClaimFraudHttpService {
 
         this.rabbitMQFacadeForTest.publishAsJson(this.config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME, claimRegisteredEvent);
 
-
         //ASSERT
         try {
             rabbitMQExpectations.VerifyAllExpectations();
-        }finally{
+        } finally {
             claimFraudService.stop();
         }
 

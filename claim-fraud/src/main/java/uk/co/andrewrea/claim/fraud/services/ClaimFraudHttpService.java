@@ -36,21 +36,21 @@ public class ClaimFraudHttpService {
 
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
-        this.service.get("/info",(req,res) -> {
+        this.service.get("/info", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
-        this.service.get("/health",(req,res) -> {
+        this.service.get("/health", (req, res) -> {
             res.status(200);
 
             return new Gson().toJson(healthChecks.runHealthChecks().values());
-        } );
+        });
 
-        this.service.get("/metrics",(req,res) -> {
+        this.service.get("/metrics", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
     }
 
@@ -71,11 +71,11 @@ public class ClaimFraudHttpService {
         Channel channel = conn.createChannel();
 
         //Create the host exchange
-        channel.exchangeDeclare(this.config.claimFraudServiceExchangeName,"topic", false);
+        channel.exchangeDeclare(this.config.claimFraudServiceExchangeName, "topic", false);
 
         //Create a queue and bind to the exchange
-        String queueName = String.format("%s.%s",this.config.claimRegistrationServiceExchangeName, this.config.claimFraudServiceExchangeName);
-        channel.queueDeclare(queueName,false, false, false, null);
+        String queueName = String.format("%s.%s", this.config.claimRegistrationServiceExchangeName, this.config.claimFraudServiceExchangeName);
+        channel.queueDeclare(queueName, false, false, false, null);
         channel.queueBind(queueName, this.config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME);
 
         //Create a consumer of the queue
@@ -88,8 +88,7 @@ public class ClaimFraudHttpService {
                                                        Envelope envelope,
                                                        AMQP.BasicProperties properties,
                                                        byte[] body)
-                                    throws IOException
-                            {
+                                    throws IOException {
                                 ClaimRegisteredEvent claimRegisteredEvent = new Gson().fromJson(new String(body), ClaimRegisteredEvent.class);
                                 ClaimVerifiedEvent claimVerifiedEvent = new ClaimVerifiedEvent();
                                 claimVerifiedEvent.claim = claimRegisteredEvent.claim;
@@ -113,7 +112,7 @@ public class ClaimFraudHttpService {
         consumer.run();
     }
 
-    public void stop(){
+    public void stop() {
         this.service.stop();
     }
 }

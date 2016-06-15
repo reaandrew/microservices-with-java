@@ -15,7 +15,7 @@ public class RabbitMQPublisher implements Publisher {
     private final Channel channel;
     private final String exchangeName;
 
-    public RabbitMQPublisher(Channel channel, String exchangeName){
+    public RabbitMQPublisher(Channel channel, String exchangeName) {
 
         this.channel = channel;
         this.exchangeName = exchangeName;
@@ -33,7 +33,7 @@ public class RabbitMQPublisher implements Publisher {
     }
 
     public static RabbitMQPublisher create(Channel channel, String exchangeName) throws IOException {
-        channel.exchangeDeclare(exchangeName,"topic",false);
+        channel.exchangeDeclare(exchangeName, "topic", false);
         return new RabbitMQPublisher(channel, exchangeName);
     }
 }

@@ -26,7 +26,7 @@ public class ClaimCommunicationHttpService {
     private String claimRegistrationSubscriber;
     private String claimPaymentSubscriber;
 
-    public ClaimCommunicationHttpService(CommunicationService communicationService, ClaimCommunicationServiceConfiguration config){
+    public ClaimCommunicationHttpService(CommunicationService communicationService, ClaimCommunicationServiceConfiguration config) {
         this.communicationService = communicationService;
         this.config = config;
         this.healthChecks.register("application", new HealthCheck() {
@@ -42,21 +42,21 @@ public class ClaimCommunicationHttpService {
 
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
-        this.service.get("/info",(req,res) -> {
+        this.service.get("/info", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
-        this.service.get("/health",(req,res) -> {
+        this.service.get("/health", (req, res) -> {
             res.status(200);
 
             return new Gson().toJson(healthChecks.runHealthChecks().values());
-        } );
+        });
 
-        this.service.get("/metrics",(req,res) -> {
+        this.service.get("/metrics", (req, res) -> {
             res.status(200);
             return "";
-        } );
+        });
 
     }
 
@@ -77,16 +77,16 @@ public class ClaimCommunicationHttpService {
         Channel channel = rabbitMQConnection.createChannel();
 
         //Create the host exchange
-        channel.exchangeDeclare(this.config.claimCommunicationServiceExchangeName,"topic", false);
+        channel.exchangeDeclare(this.config.claimCommunicationServiceExchangeName, "topic", false);
 
         //Create a queue and bind to the exchange for PAYMENT
-        claimRegistrationSubscriber = String.format("%s.%s",this.config.claimRegistrationServiceExchangeName, this.config.claimCommunicationServiceExchangeName);
-        channel.queueDeclare(claimRegistrationSubscriber,false, false, false, null);
+        claimRegistrationSubscriber = String.format("%s.%s", this.config.claimRegistrationServiceExchangeName, this.config.claimCommunicationServiceExchangeName);
+        channel.queueDeclare(claimRegistrationSubscriber, false, false, false, null);
         channel.queueBind(claimRegistrationSubscriber, this.config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME);
 
         //Create a queue and bind to the exchange for PAYMENT
-        claimPaymentSubscriber = String.format("%s.%s",this.config.claimPaymentServiceExchangeName, this.config.claimCommunicationServiceExchangeName);
-        channel.queueDeclare(claimPaymentSubscriber,false, false, false, null);
+        claimPaymentSubscriber = String.format("%s.%s", this.config.claimPaymentServiceExchangeName, this.config.claimCommunicationServiceExchangeName);
+        channel.queueDeclare(claimPaymentSubscriber, false, false, false, null);
         channel.queueBind(claimPaymentSubscriber, this.config.claimPaymentServiceExchangeName, ClaimAwardPaidEvent.NAME);
 
 
@@ -107,11 +107,10 @@ public class ClaimCommunicationHttpService {
                                                        Envelope envelope,
                                                        AMQP.BasicProperties properties,
                                                        byte[] body)
-                                    throws IOException
-                            {
+                                    throws IOException {
                                 ClaimRegisteredEvent claimRegisteredEvent = new Gson().fromJson(new String(body), ClaimRegisteredEvent.class);
 
-                                Communication communication = new Communication(claimRegisteredEvent.id,claimRegisteredEvent.claim.email);
+                                Communication communication = new Communication(claimRegisteredEvent.id, claimRegisteredEvent.claim.email);
                                 communicationService.save(communication);
 
                                 long deliveryTag = envelope.getDeliveryTag();
@@ -139,12 +138,11 @@ public class ClaimCommunicationHttpService {
                                                        Envelope envelope,
                                                        AMQP.BasicProperties properties,
                                                        byte[] body)
-                                    throws IOException
-                            {
+                                    throws IOException {
                                 ClaimAwardPaidEvent claimAwardedEvent = new Gson().fromJson(new String(body), ClaimAwardPaidEvent.class);
                                 Optional<Communication> communication = communicationService.getByClaimId(claimAwardedEvent.id);
 
-                                if(!communication.isPresent()){
+                                if (!communication.isPresent()) {
                                     throw new RuntimeException("No claim communication exists with that id");
                                 }
 

@@ -22,12 +22,12 @@ public class RabbitMQFacadeForTest {
     private static final int RABBITMQ_PORT = 5672;
     private static final String RABBITMQ_IP = "localhost";
 
-    public RabbitMQFacadeForTest(){
+    public RabbitMQFacadeForTest() {
         this.channels = new ArrayList<>();
     }
 
     public Channel createLocalRabbitMQChannel() throws IOException {
-        if(this.conn == null){
+        if (this.conn == null) {
             throw new RuntimeException("RabbitMQ connection has not yet been created. call :startRabbitMQSystem");
         }
         Channel channel = conn.createChannel();
@@ -45,7 +45,7 @@ public class RabbitMQFacadeForTest {
 
     public void stopRabbitMQSystem() throws IOException, TimeoutException {
 
-        for(Channel chan : this.channels) {
+        for (Channel chan : this.channels) {
             chan.close();
         }
         this.conn.close();
@@ -53,22 +53,22 @@ public class RabbitMQFacadeForTest {
 
     public void setupTopicExchangeFor(String exchangeName) throws IOException, TimeoutException {
         Channel channel = this.conn.createChannel();
-        channel.exchangeDeclare(exchangeName,"topic",false);
+        channel.exchangeDeclare(exchangeName, "topic", false);
         channel.close();
     }
 
     public <T> void publishAsJson(String exchangeName, String routingKey, T message) throws IOException, TimeoutException {
         Channel channel = null;
 
-            channel = this.conn.createChannel();
-            byte[] messageBodyBytes = new Gson().toJson(message).getBytes();
+        channel = this.conn.createChannel();
+        byte[] messageBodyBytes = new Gson().toJson(message).getBytes();
 
-            AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
-                    .contentType("application/json")
-                    .build();
+        AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
+                .contentType("application/json")
+                .build();
 
-            channel.basicPublish(exchangeName, routingKey, messageProperties, messageBodyBytes);
-            channel.close();
+        channel.basicPublish(exchangeName, routingKey, messageProperties, messageBodyBytes);
+        channel.close();
 
 
     }

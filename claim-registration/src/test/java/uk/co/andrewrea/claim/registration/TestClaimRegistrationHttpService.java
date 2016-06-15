@@ -78,8 +78,7 @@ public class TestClaimRegistrationHttpService {
 
         try {
             rabbitMQExpectations.VerifyAllExpectations();
-        }
-        finally{
+        } finally {
             service.stop();
         }
 

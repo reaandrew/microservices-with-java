@@ -8,13 +8,13 @@ public class ConsumingServiceQueueName {
     private String targetService;
     private String consumingService;
 
-    public ConsumingServiceQueueName(String targetService, String consumingService){
+    public ConsumingServiceQueueName(String targetService, String consumingService) {
         this.targetService = targetService;
         this.consumingService = consumingService;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%s.%s", this.targetService, this.consumingService);
     }
 }

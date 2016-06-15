@@ -50,6 +50,9 @@ public class TestClaimAwardHttpService {
         ClaimAwardedHttpService claimAwardedHttpService = new ClaimAwardedHttpService(this.config);
         claimAwardedHttpService.start();
 
+        //Wait for the server to start
+        Thread.sleep(500);
+
         Channel expectationsChannel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
         RabbitMQExpections expectations = new RabbitMQExpections(expectationsChannel);
         expectations.ExpectForExchange(this.config.claimAwardServiceExchangeName, messages -> {
@@ -58,11 +61,12 @@ public class TestClaimAwardHttpService {
 
         ClaimDto claim = this.sut.getSampleClaim();
         ClaimVerifiedEvent claimVerifiedEvent = new ClaimVerifiedEvent();
-        claimVerifiedEvent.id = "somseId";
+        claimVerifiedEvent.id = "someId";
         claimVerifiedEvent.claim = claim;
 
         //ACT
         this.rabbitMQFacadeForTest.publishAsJson(this.config.claimFraudServiceExchangeName, ClaimVerifiedEvent.NAME, claimVerifiedEvent);
+
 
         expectations.VerifyAllExpectations();
         //ASSERT

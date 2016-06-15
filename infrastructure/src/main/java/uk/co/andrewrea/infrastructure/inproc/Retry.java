@@ -13,23 +13,23 @@ public class Retry {
         int max = 10;
 
         T returnObject = null;
-        while(current < max) {
+        while (current < max) {
 
             try {
                 returnObject = retry.execute();
-                System.out.println(String.format("retry succeeded after %d seconds", current/2));
+                System.out.println(String.format("retry succeeded after %d seconds", current / 2));
                 break;
             } catch (IOException | TimeoutException e) {
                 e.printStackTrace();
                 System.out.println(String.format("continuing in %d seconds", current));
                 int nextCurrent = 0;
-                if(current + current < max){
+                if (current + current < max) {
                     nextCurrent = current + current;
-                }else {
+                } else {
                     nextCurrent = current;
                 }
                 try {
-                    Thread.sleep(current*1000);
+                    Thread.sleep(current * 1000);
                     current = nextCurrent;
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();

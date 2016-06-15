@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 public class StubEmailService implements EmailService {
 
-    protected class Email{
+    protected class Email {
         private final String to;
         private final String body;
 
-        public Email(String to, String body){
+        public Email(String to, String body) {
 
             this.to = to;
             this.body = body;

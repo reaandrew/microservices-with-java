@@ -7,7 +7,7 @@ public class Communication {
     private final String claimId;
     private final String email;
 
-    public Communication(String claimId, String email){
+    public Communication(String claimId, String email) {
 
         this.claimId = claimId;
         this.email = email;

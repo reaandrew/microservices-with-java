@@ -17,7 +17,7 @@ public class InProcCommunicationService implements CommunicationService {
     private EmailService emailService;
     private ArrayList<Communication> communications;
 
-    public InProcCommunicationService(EmailService emailService){
+    public InProcCommunicationService(EmailService emailService) {
         this.communications = new ArrayList<>();
         this.emailService = emailService;
     }
@@ -25,10 +25,10 @@ public class InProcCommunicationService implements CommunicationService {
     @Override
     public void save(Communication communication) {
         Boolean exists = this.communications.stream().anyMatch(comm -> comm.getClaimId().equals(communication.getClaimId()));
-        if(!exists) {
+        if (!exists) {
             this.communications.add(communication);
-        }else {
-        throw new RuntimeException("Claim communication already exists in the collection");
+        } else {
+            throw new RuntimeException("Claim communication already exists in the collection");
         }
     }
 
@@ -39,8 +39,8 @@ public class InProcCommunicationService implements CommunicationService {
 
     @Override
     public Optional<Communication> getByClaimId(String claimId) {
-        for(int i = 0; i < this.communications.size(); i++){
-            if(this.communications.get(i).getClaimId().equals(claimId)){
+        for (int i = 0; i < this.communications.size(); i++) {
+            if (this.communications.get(i).getClaimId().equals(claimId)) {
                 return Optional.of(this.communications.get(i));
             }
         }

@@ -22,7 +22,7 @@ public class SystemUnderTest {
     private RabbitMQFacadeForTest rabbitMqFacade;
     private ClaimFraudServiceConfiguration configuration;
 
-    public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade){
+    public SystemUnderTest(RabbitMQFacadeForTest rabbitMqFacade) {
 
         this.rabbitMqFacade = rabbitMqFacade;
         this.configuration = new ClaimFraudServiceConfiguration();

@@ -7,7 +7,7 @@ public class ClaimAwardServiceConfiguration {
     public String amqpHost = "127.0.0.1";
     public String amqpUsername;
     public String amqpPassword;
-    public String claimAwardServiceExchangeName= "claim-award-service";
+    public String claimAwardServiceExchangeName = "claim-award-service";
     public String claimFraudServiceExchangeName = "claim-fraud-service";
 
 }
