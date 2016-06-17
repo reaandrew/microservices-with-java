@@ -9,6 +9,9 @@ quickDist:
 	./gradlew compileJava
 	./gradlew shadowJar
 
+quickRun: quickDist
+	java -jar ./claim-portal/build/libs/claim-portal-all.jar -c ./claim-portal/config/development.yml
+
     	 
 base-docker:
 	#FROM: https://github.com/anapsix/docker-alpine-java
