@@ -1,5 +1,7 @@
 # Microservices in Java
 
+[![Build Status](https://travis-ci.org/REAANDREW/microservices-with-java.svg?branch=master)](https://travis-ci.org/REAANDREW/microservices-with-java)
+
 This is a small project for me to explore how I would go about creating Microservices in Java following good practices and principles that apply to any language.
 
 Some of the characteristics of the solution I want to end up with include:
