@@ -94,13 +94,7 @@ public class ClaimRegistrationHttpService {
             AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
                     .contentType("application/json")
                     .build();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            
             channel.basicPublish(config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME, messageProperties, messageBodyBytes);
 
             LoggerFactory.getLogger(this.getClass()).info("claim registered event published");

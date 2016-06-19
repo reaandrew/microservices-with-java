@@ -104,12 +104,6 @@ public class ClaimAwardedHttpService {
                                         .contentType("application/json")
                                         .build();
 
-                                try {
-                                    Thread.sleep(5000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
                                 channel.basicPublish(config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME, messageProperties, messageBodyBytes);
 
                                 long deliveryTag = envelope.getDeliveryTag();

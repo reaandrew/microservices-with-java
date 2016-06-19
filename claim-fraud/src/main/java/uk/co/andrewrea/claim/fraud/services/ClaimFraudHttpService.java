@@ -100,12 +100,6 @@ public class ClaimFraudHttpService {
                                         .contentType("application/json")
                                         .build();
 
-                                try {
-                                    Thread.sleep(5000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
                                 channel.basicPublish(config.claimFraudServiceExchangeName, ClaimVerifiedEvent.NAME, messageProperties, messageBodyBytes);
 
                                 long deliveryTag = envelope.getDeliveryTag();

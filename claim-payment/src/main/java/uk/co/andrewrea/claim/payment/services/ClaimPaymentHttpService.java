@@ -107,11 +107,6 @@ public class ClaimPaymentHttpService {
                                         .contentType("application/json")
                                         .build();
 
-                                try {
-                                    Thread.sleep(5000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 channel.basicPublish(config.claimPaymentServiceExchangeName, claimAwardPaidEvent.NAME, messageProperties, messageBodyBytes);
 
                                 long deliveryTag = envelope.getDeliveryTag();
