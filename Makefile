@@ -3,6 +3,9 @@ CLAIM_DB_USER := "claim"
 CLAIM_DB_NAME := "claims"
 
 compile:
+	docker-compose kill
+	docker-compose rm -a -f
+	docker-compose up -d mongo message-broker
 	./gradlew clean
 	./gradlew build
 

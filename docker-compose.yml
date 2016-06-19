@@ -9,7 +9,7 @@ services:
       environment:
         RABBITMQ_ERLANG_COOKIE: "wabbit"
         RABBITMQ_NODENAME: "broker"
-    claim-database:
+    postgres:
       image: postgres
       ports:
         - "5432:5432"
@@ -17,7 +17,7 @@ services:
         POSTGRES_PASSWORD: "docker"
         POSTGRES_USER: "claim"
         POSTGRES_DB: "claims"
-    claim-query-database:
+    mongo:
       image: mongo:3
       ports:
         - "127.0.0.1:27017:27017"

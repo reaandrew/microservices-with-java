@@ -127,15 +127,12 @@ public class ClaimPortalHttpService {
             claim.receiveEmail = params.getString("receiveEmail") != null;
             claim.email = params.getString("email");
 
-            /*
-            HttpResponse<JsonNode> response = Unirest.post(String.format("http://localhost:%d/claims", config.servicePort))
+
+            HttpResponse<JsonNode> response = Unirest.post(String.format("%s/claims", config.claimRegistrationServiceUrl))
                     .body(new Gson().toJson(claim))
                     .asJson();
-                    */
 
-            //res.redirect("/claim/%s".format(response.getBody().getObject().getString("id")));
-
-            res.redirect("/claims/123");
+            res.redirect("/claim/%s".format(response.getBody().getObject().getString("id")));
 
             res.status(200);
 
@@ -143,9 +140,13 @@ public class ClaimPortalHttpService {
         }, new JsonTransformer());
 
         this.service.get("/claims/:id",(req,res) -> {
-            Map map = new HashMap();
-            map.put("status", "BOOM");
-            return new ModelAndView(map,"claim-details.hbs");
+
+            HttpResponse<String> response = Unirest.post(String.format("%s/claims/%s", config.claimQueryServiceUrl, req.params("id")))
+                    .asString();
+
+            ClaimDto claim = new Gson().fromJson(response.getBody(), ClaimDto.class);
+
+            return new ModelAndView(claim,"claim-details.hbs");
         }, new HandlebarsTemplateEngine());
 
         this.service.exception(Exception.class, (exception, request, response) -> {

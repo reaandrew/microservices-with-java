@@ -4,6 +4,7 @@ package uk.co.andrewrea.claim.portal.domain.dtos;
  * Created by vagrant on 5/8/16.
  */
 public class ClaimDto {
+    public String id;
     public String firstname;
     public String surname;
     public String middlenames;
@@ -14,4 +15,5 @@ public class ClaimDto {
     public BankAccountDto bankAccount;
     public String email;
     public Boolean receiveEmail;
+    public String status;
 }

@@ -1,3 +1,5 @@
 ---
 serviceIp: "0.0.0.0"
 servicePort: 8080
+claimRegistrationServiceUrl: "http://localhost:8083"
+claimQueryServiceUrl: "http://localhost:8081"

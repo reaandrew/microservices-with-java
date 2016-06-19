@@ -61,6 +61,7 @@ public class ClaimRegistrationHttpService {
         //Create the host exchange
         channel.exchangeDeclare(this.config.claimRegistrationServiceExchangeName, "topic", false);
 
+        //TODO: Need to change this so that we have the claim submitted workflow which we are missing.
         this.service.post("claims", (req, res) -> {
             ClaimDto claimDto = new Gson().fromJson(req.body(), ClaimDto.class);
 
