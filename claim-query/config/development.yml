@@ -1,0 +1,7 @@
+---
+serviceIp: "127.0.0.1"
+servicePort: 8081
+mongoDbPort: 27017
+mongoDbHost: "0.0.0.0"
+mongoDatabaseName: "claimQuery"
+mongoClaimCollectionName: "claims"

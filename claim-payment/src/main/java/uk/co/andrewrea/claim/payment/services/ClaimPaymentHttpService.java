@@ -55,6 +55,11 @@ public class ClaimPaymentHttpService {
 
     }
 
+
+    public void stop() {
+        this.service.stop();
+    }
+
     private void startRabbitMQ() throws IOException, TimeoutException {
         //Create a connection
         Connection conn = Retry.io(() -> {
@@ -115,7 +120,4 @@ public class ClaimPaymentHttpService {
         consumer.run();
     }
 
-    public void stop() {
-        this.service.stop();
-    }
 }

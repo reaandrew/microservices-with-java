@@ -20,6 +20,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -84,6 +85,8 @@ project(':claim-portal') {
 project(':claim-query') {
     dependencies {
         compile "org.mongodb:mongo-java-driver:$mongodbVersion"
+        compile project(':infrastructure')
+        testCompile project(':infrastructure')
     }
 }
 project(':claim-query-updater') {
