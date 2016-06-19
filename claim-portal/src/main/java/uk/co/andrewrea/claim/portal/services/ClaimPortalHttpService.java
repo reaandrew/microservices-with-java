@@ -4,20 +4,25 @@ import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import org.eclipse.jetty.util.MultiMap;
+import org.eclipse.jetty.util.UrlEncoded;
 import org.slf4j.LoggerFactory;
 import spark.ModelAndView;
 import spark.Service;
-import spark.Spark;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 import uk.co.andrewrea.claim.portal.config.ClaimPortalServiceConfiguration;
+import uk.co.andrewrea.claim.portal.domain.dtos.AddressDto;
+import uk.co.andrewrea.claim.portal.domain.dtos.BankAccountDto;
+import uk.co.andrewrea.claim.portal.domain.dtos.ClaimDto;
+import uk.co.andrewrea.infrastructure.spark.JsonTransformer;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static spark.Spark.staticFiles;
 
 /**
  * Created by vagrant on 6/15/16.
@@ -89,11 +94,59 @@ public class ClaimPortalHttpService {
             return new ModelAndView(map,"claim-form.hbs");
         }, new HandlebarsTemplateEngine());
 
-        /*
-        this.service.post("/claims", (req,res) -> {
 
-        });
-        */
+        this.service.post("/claims", "application/json", (req,res) -> {
+
+            MultiMap<String> params = new MultiMap<>();
+            UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+
+            ClaimDto claim = new ClaimDto();
+            claim.firstname = params.getString("firstname");
+            claim.middlenames = params.getString("middlenames");
+            claim.surname = params.getString("surname");
+            claim.dob = params.getString("dob");
+            try {
+                claim.income = Integer.parseInt(params.getString("income"));
+            }catch(NumberFormatException ex){
+                claim.income = 0;
+            }
+            claim.passportNumber = params.getString("passportNo");
+
+            claim.address = new AddressDto();
+            claim.address.line1 = params.getString("line1");
+            claim.address.line2 = params.getString("line2");
+            claim.address.town = params.getString("town");
+            claim.address.city = params.getString("city");
+            claim.address.postCode = params.getString("postCode");
+
+            claim.bankAccount = new BankAccountDto();
+            claim.bankAccount.name = params.getString("bankName");
+            claim.bankAccount.sortCode = params.getString("sortCode");
+            claim.bankAccount.number = params.getString("accountNumber");
+
+            claim.receiveEmail = params.getString("receiveEmail") != null;
+            claim.email = params.getString("email");
+
+            /*
+            HttpResponse<JsonNode> response = Unirest.post(String.format("http://localhost:%d/claims", config.servicePort))
+                    .body(new Gson().toJson(claim))
+                    .asJson();
+                    */
+
+            //res.redirect("/claim/%s".format(response.getBody().getObject().getString("id")));
+
+            res.redirect("/claims/123");
+
+            res.status(200);
+
+            return claim;
+        }, new JsonTransformer());
+
+        this.service.get("/claims/:id",(req,res) -> {
+            Map map = new HashMap();
+            map.put("status", "BOOM");
+            return new ModelAndView(map,"claim-details.hbs");
+        }, new HandlebarsTemplateEngine());
 
         this.service.exception(Exception.class, (exception, request, response) -> {
             // Handle the exception here

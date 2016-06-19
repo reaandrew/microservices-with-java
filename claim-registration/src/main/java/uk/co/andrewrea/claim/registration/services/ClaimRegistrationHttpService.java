@@ -4,15 +4,19 @@ import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
-import com.rabbitmq.client.impl.StrictExceptionHandler;
 import spark.Service;
 import uk.co.andrewrea.claim.registration.config.ClaimRegistrationConfiguration;
+import uk.co.andrewrea.claim.registration.domain.core.ClaimService;
 import uk.co.andrewrea.claim.registration.domain.events.publish.ClaimRegisteredEvent;
 import uk.co.andrewrea.claim.registration.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.registration.domain.models.*;
 import uk.co.andrewrea.infrastructure.inproc.Retry;
+import uk.co.andrewrea.infrastructure.spark.JsonTransformer;
 
 import java.io.IOException;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -22,9 +26,11 @@ public class ClaimRegistrationHttpService {
     private Service service;
     private final HealthCheckRegistry healthChecks = new HealthCheckRegistry();
     private ClaimRegistrationConfiguration config;
+    private ClaimService claimService;
 
-    public ClaimRegistrationHttpService(ClaimRegistrationConfiguration configuration) {
+    public ClaimRegistrationHttpService(ClaimRegistrationConfiguration configuration, ClaimService claimService) {
         this.config = configuration;
+        this.claimService = claimService;
         this.healthChecks.register("application", new HealthCheck() {
             @Override
             protected Result check() throws Exception {
@@ -56,10 +62,27 @@ public class ClaimRegistrationHttpService {
         channel.exchangeDeclare(this.config.claimRegistrationServiceExchangeName, "topic", false);
 
         this.service.post("claims", (req, res) -> {
-            ClaimDto claim = new Gson().fromJson(req.body(), ClaimDto.class);
+            ClaimDto claimDto = new Gson().fromJson(req.body(), ClaimDto.class);
+
+            ClaimInfo info =  new ClaimInfo(claimDto.income,claimDto.passportNumber);
+            Name name = new Name(claimDto.firstname, claimDto.middlenames, claimDto.surname);
+            uk.co.andrewrea.claim.registration.domain.models.Address address = new uk.co.andrewrea.claim.registration.domain.models.Address(claimDto.address.line1,
+                    claimDto.address.line2,
+                    claimDto.address.town,
+                    claimDto.address.city,
+                    claimDto.address.postCode);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dob = sdf.parse(claimDto.dob);
+            ContactDetails contactDetails = new ContactDetails(claimDto.email, claimDto.receiveEmail);
+            PersonalDetails personalDetails = new PersonalDetails(name,address,dob,contactDetails);
+            BankAccount bankAccount = new BankAccount(claimDto.bankAccount.name, claimDto.bankAccount.sortCode, claimDto.bankAccount.number);
+            Claim claim = new Claim(info,personalDetails, bankAccount);
+
+            this.claimService.submitClaim(claim);
+
             ClaimRegisteredEvent claimRegisteredEvent = new ClaimRegisteredEvent();
-            claimRegisteredEvent.id = UUID.randomUUID().toString();
-            claimRegisteredEvent.claim = claim;
+            claimRegisteredEvent.id = claim.getId();
+            claimRegisteredEvent.claim = claimDto;
 
             byte[] messageBodyBytes = new Gson().toJson(claimRegisteredEvent).getBytes();
 
@@ -69,9 +92,13 @@ public class ClaimRegistrationHttpService {
 
             channel.basicPublish(config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME, messageProperties, messageBodyBytes);
 
+
             res.status(202);
-            return "";
-        });
+            HashMap returnValue =  new HashMap();
+            returnValue.put("id",claimRegisteredEvent.id);
+
+            return returnValue;
+        }, new JsonTransformer());
 
         this.service.get("/info", (req, res) -> {
             res.status(200);

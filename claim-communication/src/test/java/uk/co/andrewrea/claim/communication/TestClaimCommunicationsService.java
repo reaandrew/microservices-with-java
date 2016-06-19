@@ -9,6 +9,7 @@ import uk.co.andrewrea.claim.communication.infrastructure.inproc.InProcCommunica
 import uk.co.andrewrea.claim.communication.services.ClaimCommunicationHttpService;
 import uk.co.andrewrea.infrastructure.inproc.StubEmailService;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
+import uk.co.andrewrea.infrastructure.spark.Settings;
 
 
 import java.io.IOException;
@@ -57,7 +58,8 @@ public class TestClaimCommunicationsService {
         ClaimCommunicationHttpService claimCommunicationHttpService = new ClaimCommunicationHttpService(communicationService, this.config);
         claimCommunicationHttpService.start();
 
-        Thread.sleep(500);
+        //Wait for the server to start
+        Thread.sleep(Settings.SERVER_INIT_WAIT);
 
         //Publish a ClaimRegisteredEvent for the communications service to know
         //  how the claimant would like to be contacted.

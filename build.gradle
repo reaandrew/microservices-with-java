@@ -14,6 +14,8 @@ allprojects {
         commonsCliVersion = '1.3.1'
         yamlBeansVersion = "1.09"
         fakerVersion = "0.10"
+        postgresVersion="9.4.1208.jre7"
+        mongodbVersion="3.2.2"
     }
 
     repositories {
@@ -41,7 +43,11 @@ allprojects {
 project(':claim-registration') {
     dependencies {
         compile project(':infrastructure')
+        compile "org.postgresql:postgresql:$postgresVersion"
+        compile "org.mongodb:mongo-java-driver:$mongodbVersion"
         testCompile project(':infrastructure')
+        testCompile "org.postgresql:postgresql:$postgresVersion"
+        testCompile "org.mongodb:mongo-java-driver:$mongodbVersion"
     }
 }
 project(':claim-fraud') {
@@ -71,9 +77,19 @@ project(':claim-communication') {
 project(':claim-portal') {
     dependencies {
         compile "com.github.javafaker:javafaker:$fakerVersion"
+        compile project(':infrastructure')
+        testCompile project(':infrastructure')
     }
 }
-project(':claim-query') {}
-project(':claim-query-updater') {}
+project(':claim-query') {
+    dependencies {
+        compile "org.mongodb:mongo-java-driver:$mongodbVersion"
+    }
+}
+project(':claim-query-updater') {
+    dependencies {
+        compile "org.mongodb:mongo-java-driver:$mongodbVersion"
+    }
+}
 project(':personal-details') {}
 project(':infrastructure') {}

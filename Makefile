@@ -1,3 +1,7 @@
+CLAIM_DB_PASSWORD := "docker"
+CLAIM_DB_USER := "claim"
+CLAIM_DB_NAME := "claims"
+
 compile:
 	./gradlew clean
 	./gradlew build

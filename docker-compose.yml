@@ -1,5 +1,26 @@
 version: '2'
 services:
+    message-broker:
+      image: rabbitmq:3.6-management
+      ports:
+        - "14672:15672" # management port (guest:guest)
+        - "4672:5672"   # amqp port
+        - "45672:25672" # cluster por
+      environment:
+        RABBITMQ_ERLANG_COOKIE: "wabbit"
+        RABBITMQ_NODENAME: "broker"
+    claim-database:
+      image: postgres
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_PASSWORD: "docker"
+        POSTGRES_USER: "claim"
+        POSTGRES_DB: "claims"
+    claim-query-database:
+      image: mongo:3
+      ports:
+        - "27017:27017"
     claim-award:
         build: ./claim-award/
         ports: 
@@ -20,3 +41,7 @@ services:
         build: ./claim-registration/
         ports:
           - "8083:8083"
+    claim-portal:
+        build: ./claim-portal/
+        ports:
+          - "8080:8080"

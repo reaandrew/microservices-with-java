@@ -1,5 +1,3 @@
-package uk.co.andrewrea.claim.registration;
-
 import uk.co.andrewrea.claim.registration.domain.dtos.AddressDto;
 import uk.co.andrewrea.claim.registration.domain.dtos.BankAccountDto;
 import uk.co.andrewrea.claim.registration.domain.dtos.ClaimDto;
@@ -15,7 +13,7 @@ public class SystemUnderTest {
         claim.firstname = "John";
         claim.middlenames = "Jospeh";
         claim.surname = "Doe";
-        claim.dob = "1983/04/21";
+        claim.dob = "21/04/1983";
         claim.income = 21000;
         claim.passportNumber = "123456789";
 

@@ -11,6 +11,7 @@ import uk.co.andrewrea.claim.fraud.domain.events.subscribe.ClaimRegisteredEvent;
 import uk.co.andrewrea.claim.fraud.services.ClaimFraudHttpService;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQExpections;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
+import uk.co.andrewrea.infrastructure.spark.Settings;
 
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class TestClaimFraudHttpService {
         claimFraudService.start();
 
         //Wait for the server to start
-        Thread.sleep(500);
+        Thread.sleep(Settings.SERVER_INIT_WAIT);
 
         RabbitMQExpections rabbitMQExpectations = new RabbitMQExpections(this.rabbitMQFacadeForTest.createLocalRabbitMQChannel());
 

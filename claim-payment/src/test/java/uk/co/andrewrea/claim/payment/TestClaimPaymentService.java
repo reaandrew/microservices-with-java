@@ -14,6 +14,7 @@ import uk.co.andrewrea.infrastructure.core.Publisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQExpections;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
+import uk.co.andrewrea.infrastructure.spark.Settings;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -52,7 +53,7 @@ public class TestClaimPaymentService {
         claimPaymentHttpService.start();
 
         //Wait for the server to start
-        Thread.sleep(500);
+        Thread.sleep(Settings.SERVER_INIT_WAIT);
 
         Channel expectationsChannel = this.rabbitMQFacadeForTest.createLocalRabbitMQChannel();
         RabbitMQExpections expectations = new RabbitMQExpections(expectationsChannel);

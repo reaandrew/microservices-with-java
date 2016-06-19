@@ -1,0 +1,12 @@
+
+
+CREATE TABLE Claim(
+   id          INT PRIMARY KEY     NOT NULL,
+   firstname               TEXT    NOT NULL,
+   middlenames             TEXT    NOT NULL,
+   surname                 TEXT    NOT NULL,
+   dob                     TEXT    NOT NULL,
+   income                  TEXT    NOT NULL,
+   passportNo              TEXT    NOT NULL,
+   salary                  REAL    NOT NULL
+);
