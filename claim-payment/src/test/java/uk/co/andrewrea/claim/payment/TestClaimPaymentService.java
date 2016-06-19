@@ -1,6 +1,8 @@
 package uk.co.andrewrea.claim.payment;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rabbitmq.client.Channel;
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +31,7 @@ public class TestClaimPaymentService {
     private ClaimPaymentServiceConfiguration config;
 
     @Before
-    public void before() throws IOException, TimeoutException {
+    public void before() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.sut = new SystemUnderTest();
@@ -39,7 +41,7 @@ public class TestClaimPaymentService {
     }
 
     @After
-    public void after() throws IOException, TimeoutException {
+    public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
     }
 

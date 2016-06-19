@@ -9,5 +9,7 @@ import java.util.Collection;
  */
 public interface ClaimQueryService {
 
-    public ClaimDto FindClaimById(String id);
+    public ClaimDto findClaimById(String id);
+
+    void save(ClaimDto claim);
 }

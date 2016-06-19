@@ -28,9 +28,11 @@ public class TestMongoClaimQueryService {
 
         Gson gson = new Gson();
 
-        db.getCollection(config.mongoClaimQueryCollectionName).insertOne(Document.parse(gson.toJson(claim)));
+        Document document = Document.parse(gson.toJson(claim));
+        document.put("_id", claim.id);
+        db.getCollection(config.mongoClaimQueryCollectionName).insertOne(document);
 
-        ClaimDto claimFromDb = service.FindClaimById(claim.id);
+        ClaimDto claimFromDb = service.findClaimById(claim.id);
 
         Assert.assertEquals(claim.id, claimFromDb.id);
     }

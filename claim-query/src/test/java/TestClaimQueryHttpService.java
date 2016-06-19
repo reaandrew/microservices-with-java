@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.co.andrewrea.claim.query.config.ClaimQueryServiceConfiguration;
 import uk.co.andrewrea.claim.query.domain.dtos.ClaimDto;
+import uk.co.andrewrea.claim.query.infrastructure.inproc.InMemoryClaimQueryService;
 import uk.co.andrewrea.claim.query.services.ClaimQueryHttpService;
 import uk.co.andrewrea.infrastructure.spark.Settings;
 
@@ -20,10 +21,10 @@ public class TestClaimQueryHttpService {
     @Test
     public void testReturnsQueryFromTheQueryStore() throws IOException, TimeoutException, InterruptedException, UnirestException {
         ClaimQueryServiceConfiguration config = new ClaimQueryServiceConfiguration();
-        FakeClaimQueryService claimQueryService = new FakeClaimQueryService();
+        InMemoryClaimQueryService claimQueryService = new InMemoryClaimQueryService();
 
         ClaimDto claim =  new SystemUnderTest().getSampleClaim();
-        claimQueryService.load(claim);
+        claimQueryService.save(claim);
 
         ClaimQueryHttpService service = new ClaimQueryHttpService(config, claimQueryService);
 

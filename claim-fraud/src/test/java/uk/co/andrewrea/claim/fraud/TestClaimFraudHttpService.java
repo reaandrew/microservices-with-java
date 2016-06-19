@@ -1,6 +1,7 @@
 package uk.co.andrewrea.claim.fraud;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class TestClaimFraudHttpService {
     private ClaimFraudServiceConfiguration config;
 
     @Before
-    public void before() throws IOException, TimeoutException {
+    public void before() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.sut = new SystemUnderTest(this.rabbitMQFacadeForTest);
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
@@ -33,7 +34,7 @@ public class TestClaimFraudHttpService {
     }
 
     @After
-    public void after() throws IOException, TimeoutException {
+    public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
     }
 

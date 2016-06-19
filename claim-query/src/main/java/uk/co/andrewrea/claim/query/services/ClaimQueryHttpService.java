@@ -7,7 +7,6 @@ import spark.Service;
 import uk.co.andrewrea.claim.query.config.ClaimQueryServiceConfiguration;
 import uk.co.andrewrea.claim.query.core.ClaimQueryService;
 import uk.co.andrewrea.claim.query.domain.dtos.ClaimDto;
-import uk.co.andrewrea.claim.query.infrastructure.mongo.MongoClaimQueryService;
 import uk.co.andrewrea.infrastructure.spark.JsonTransformer;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class ClaimQueryHttpService {
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
         this.service.get("/claims/:id", (req,res) -> {
-            ClaimDto claim = this.claimService.FindClaimById(req.params("id"));
+            ClaimDto claim = this.claimService.findClaimById(req.params("id"));
             return claim;
         }, new JsonTransformer());
 

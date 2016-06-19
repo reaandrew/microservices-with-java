@@ -1,4 +1,6 @@
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.rabbitmq.client.Channel;
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +30,7 @@ public class TestClaimAwardHttpService {
     private ClaimAwardServiceConfiguration config;
 
     @Before
-    public void before() throws IOException, TimeoutException {
+    public void before() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.sut = new SystemUnderTest();
@@ -38,7 +40,7 @@ public class TestClaimAwardHttpService {
     }
 
     @After
-    public void after() throws IOException, TimeoutException {
+    public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
     }
 

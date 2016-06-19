@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +30,7 @@ public class TestClaimRegistrationHttpService {
     private InMemoryClaimService claimService;
 
     @Before
-    public void before() throws IOException, TimeoutException {
+    public void before() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
@@ -42,7 +43,7 @@ public class TestClaimRegistrationHttpService {
     }
 
     @After
-    public void after() throws IOException, TimeoutException {
+    public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
     }
 

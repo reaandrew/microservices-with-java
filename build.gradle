@@ -82,16 +82,26 @@ project(':claim-portal') {
         testCompile project(':infrastructure')
     }
 }
+project(':claim-query-domain'){
+    dependencies {
+        compile "org.mongodb:mongo-java-driver:$mongodbVersion"
+    }
+}
 project(':claim-query') {
     dependencies {
         compile "org.mongodb:mongo-java-driver:$mongodbVersion"
         compile project(':infrastructure')
+        compile project(':claim-query-domain')
         testCompile project(':infrastructure')
     }
 }
 project(':claim-query-updater') {
     dependencies {
         compile "org.mongodb:mongo-java-driver:$mongodbVersion"
+        compile project(':claim-query-domain')
+        compile project(':infrastructure')
+        testCompile project(':claim-query-domain')
+        testCompile project(':infrastructure')
     }
 }
 project(':personal-details') {}

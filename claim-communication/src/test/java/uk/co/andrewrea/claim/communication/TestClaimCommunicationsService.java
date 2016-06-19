@@ -1,5 +1,7 @@
 package uk.co.andrewrea.claim.communication;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONException;
 import org.junit.*;
 import uk.co.andrewrea.claim.communication.config.ClaimCommunicationServiceConfiguration;
 import uk.co.andrewrea.claim.communication.domain.dtos.ClaimDto;
@@ -25,7 +27,7 @@ public class TestClaimCommunicationsService {
     private ClaimCommunicationServiceConfiguration config;
 
     @Before
-    public void before() throws IOException, TimeoutException {
+    public void before() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.sut = new SystemUnderTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
@@ -35,7 +37,7 @@ public class TestClaimCommunicationsService {
     }
 
     @After
-    public void after() throws IOException, TimeoutException {
+    public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
     }
 
