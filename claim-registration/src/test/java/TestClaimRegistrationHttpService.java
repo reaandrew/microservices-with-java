@@ -71,6 +71,7 @@ public class TestClaimRegistrationHttpService {
                 .body(jsonBody)
                 .asString();
 
+        System.out.println(response.getBody());
         Assert.assertEquals(202, response.getCode());
         Assert.assertEquals(1, claimService.getNumberOfClaimsSubmitted());
 

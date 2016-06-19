@@ -4,6 +4,8 @@ import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.SimpleLogger;
 import spark.Service;
 import uk.co.andrewrea.claim.registration.config.ClaimRegistrationConfiguration;
 import uk.co.andrewrea.claim.registration.domain.core.ClaimService;
@@ -63,6 +65,8 @@ public class ClaimRegistrationHttpService {
 
         //TODO: Need to change this so that we have the claim submitted workflow which we are missing.
         this.service.post("claims", (req, res) -> {
+            LoggerFactory.getLogger(this.getClass()).info("message received");
+
             ClaimDto claimDto = new Gson().fromJson(req.body(), ClaimDto.class);
 
             ClaimInfo info =  new ClaimInfo(claimDto.income,claimDto.passportNumber);
@@ -91,8 +95,15 @@ public class ClaimRegistrationHttpService {
                     .contentType("application/json")
                     .build();
 
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             channel.basicPublish(config.claimRegistrationServiceExchangeName, ClaimRegisteredEvent.NAME, messageProperties, messageBodyBytes);
 
+            LoggerFactory.getLogger(this.getClass()).info("claim registered event published");
 
             res.status(202);
             HashMap returnValue =  new HashMap();

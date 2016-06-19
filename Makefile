@@ -15,10 +15,17 @@ dist: compile
 quickDist:
 	./gradlew compileJava
 	./gradlew shadowJar
+	docker-compose build
+
+startInfra:
+	docker-compose up -d message-broker mongo
+
+startApps:
+	docker-compose up claim-award claim-communication claim-fraud claim-payment claim-registration claim-query-updater claim-query claim-portal
+
 
 quickRun: quickDist
 	java -jar ./claim-portal/build/libs/claim-portal-all.jar -c ./claim-portal/config/development.yml
-
     	 
 base-docker:
 	#FROM: https://github.com/anapsix/docker-alpine-java

@@ -6,7 +6,7 @@ amqpHost: "192.168.56.50"
 amqpUsername: "admin"
 amqpPassword: "admin"
 mongoDbPort: 27017
-mongoDbHost: "127.0.0.1"
+mongoDbHost: "mongo"
 mongoDatabaseName: "claimRegistration"
 mongoClaimCollectionName: "claims"
 claimRegistrationServiceExchangeName: "claim-registration-service"

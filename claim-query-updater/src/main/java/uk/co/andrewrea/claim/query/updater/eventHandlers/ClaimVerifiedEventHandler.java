@@ -22,6 +22,8 @@ public class ClaimVerifiedEventHandler implements EventHandler {
     @Override
     public void handle(byte[] data) {
         ClaimVerifiedEvent claimVerifiedEvent = new Gson().fromJson(new String(data), ClaimVerifiedEvent.class);
+        System.out.println(String.format("Received Claim Verified Event : %s", claimVerifiedEvent.id));
+
         ClaimDto claim = this.claimQueryService.findClaimById(claimVerifiedEvent.id);
 
         claim.status = "verified";

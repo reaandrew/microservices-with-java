@@ -86,6 +86,8 @@ public class ClaimQueryUpdaterHttpService {
             factory.setVirtualHost("/");
             factory.setHost(this.config.amqpHost);
             factory.setPort(this.config.amqpPort);
+            factory.setUsername(this.config.amqpUsername);
+            factory.setPassword(this.config.amqpPassword);
             factory.setAutomaticRecoveryEnabled(true);
 
             return factory.newConnection();
@@ -116,11 +118,23 @@ public class ClaimQueryUpdaterHttpService {
                                                        AMQP.BasicProperties properties,
                                                        byte[] body)
                                     throws IOException {
-                                String routingKey = envelope.getRoutingKey();
-                                EventHandler eventHandler = eventHandlers.get(routingKey);
-                                eventHandler.handle(body);
                                 long deliveryTag = envelope.getDeliveryTag();
-                                channel.basicAck(deliveryTag, false);
+                                String routingKey = envelope.getRoutingKey();
+
+                                System.out.println(String.format("Trying %s", routingKey));
+
+                                try {
+                                    EventHandler eventHandler = eventHandlers.get(routingKey);
+                                    eventHandler.handle(body);
+                                    channel.basicAck(deliveryTag, false);
+                                    System.out.println(String.format("SUCCESS %s", routingKey));
+                                }catch(Exception ex){
+                                    System.out.println(String.format("Exception : %s", ex));
+
+                                    channel.basicNack(deliveryTag,false,false);
+                                    System.out.println(String.format("FAILURE %s", routingKey));
+                                }
+
                             }
                         });
             } catch (IOException e) {

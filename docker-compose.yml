@@ -40,8 +40,25 @@ services:
     claim-registration:
         build: ./claim-registration/
         ports:
-          - "8083:8083"
+          - "127.0.0.1:8083:8083"
+        links:
+          - mongo
+    claim-query-updater:
+        build: ./claim-query-updater/
+        ports:
+          - "8082:8082"
+        links:
+          - mongo
+    claim-query:
+        build: ./claim-query/
+        ports:
+          - "127.0.0.1:8081:8081"
+        links:
+          - mongo
     claim-portal:
         build: ./claim-portal/
         ports:
           - "8080:8080"
+        links:
+          - claim-registration:cr
+          - claim-query:cq

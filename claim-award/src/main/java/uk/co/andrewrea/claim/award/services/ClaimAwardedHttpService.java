@@ -96,12 +96,19 @@ public class ClaimAwardedHttpService {
 
                                 ClaimAwardedEvent claimAwardedEvent = new ClaimAwardedEvent();
                                 claimAwardedEvent.claim = claimVerifiedEvent.claim;
+                                claimAwardedEvent.id = claimVerifiedEvent.id;
 
                                 byte[] messageBodyBytes = new Gson().toJson(claimAwardedEvent).getBytes();
 
                                 AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
                                         .contentType("application/json")
                                         .build();
+
+                                try {
+                                    Thread.sleep(5000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
                                 channel.basicPublish(config.claimAwardServiceExchangeName, ClaimAwardedEvent.NAME, messageProperties, messageBodyBytes);
 

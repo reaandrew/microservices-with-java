@@ -29,6 +29,8 @@ public class ClaimRegisteredEventHandler implements EventHandler {
 
         claim.status = "registered";
         claim.id = claimRegisteredEvent.id;
+
+        System.out.println(String.format("Claim ID set to %s", claim.id));
         claimQueryService.save(claim);
     }
 }

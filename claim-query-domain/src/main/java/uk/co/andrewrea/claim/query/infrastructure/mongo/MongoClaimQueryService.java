@@ -24,9 +24,15 @@ public class MongoClaimQueryService implements ClaimQueryService {
     public ClaimDto findClaimById(String id) {
         FindIterable<Document> iterable = this.claimCollection.find(Filters.eq("_id", id));
 
-        ClaimDto claimFromDb = new Gson().fromJson(iterable.first().toJson(), ClaimDto.class);
+        if(iterable.iterator().hasNext()){
+            ClaimDto claimFromDb = new Gson().fromJson(iterable.first().toJson(), ClaimDto.class);
 
-        return claimFromDb;
+            return claimFromDb;
+        }else{
+            return null;
+        }
+
+
     }
 
     @Override
@@ -34,6 +40,12 @@ public class MongoClaimQueryService implements ClaimQueryService {
         String json = new Gson().toJson(claim);
         Document document = Document.parse(json);
         document.put("_id", claim.id);
-        this.claimCollection.insertOne(document);
+        System.out.println(String.format("Mongo Document ID (_id) set to %s", claim.id));
+        if(this.findClaimById(claim.id) == null){
+            this.claimCollection.insertOne(document);
+        }else{
+            this.claimCollection.replaceOne(Filters.eq("_id", claim.id), document);
+        }
+
     }
 }

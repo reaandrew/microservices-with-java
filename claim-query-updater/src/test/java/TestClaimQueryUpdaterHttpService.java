@@ -34,6 +34,10 @@ public class TestClaimQueryUpdaterHttpService {
         this.rabbitMQFacadeForTest = new RabbitMQFacadeForTest();
         this.rabbitMQFacadeForTest.startRabbitMQSystem();
         this.config = new ClaimQueryUpdaterServiceConfiguration();
+        this.config.amqpHost = "localhost";
+        this.config.amqpUsername = "admin";
+        this.config.amqpPassword = "admin";
+
         this.claimQueryService = new InMemoryClaimQueryService();
         this.service = new ClaimQueryUpdaterHttpService(this.config, claimQueryService);
         this.service.start();
@@ -44,11 +48,6 @@ public class TestClaimQueryUpdaterHttpService {
     public void after() throws IOException, TimeoutException, JSONException, UnirestException {
         this.rabbitMQFacadeForTest.stopRabbitMQSystem();
         this.service.stop();
-    }
-
-    @Test
-    public void test(){
-
     }
 
     @Test

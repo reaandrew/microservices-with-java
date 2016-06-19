@@ -92,12 +92,19 @@ public class ClaimFraudHttpService {
                                 ClaimRegisteredEvent claimRegisteredEvent = new Gson().fromJson(new String(body), ClaimRegisteredEvent.class);
                                 ClaimVerifiedEvent claimVerifiedEvent = new ClaimVerifiedEvent();
                                 claimVerifiedEvent.claim = claimRegisteredEvent.claim;
+                                claimVerifiedEvent.id = claimRegisteredEvent.id;
 
                                 byte[] messageBodyBytes = new Gson().toJson(claimVerifiedEvent).getBytes();
 
                                 AMQP.BasicProperties messageProperties = new AMQP.BasicProperties.Builder()
                                         .contentType("application/json")
                                         .build();
+
+                                try {
+                                    Thread.sleep(5000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
                                 channel.basicPublish(config.claimFraudServiceExchangeName, ClaimVerifiedEvent.NAME, messageProperties, messageBodyBytes);
 

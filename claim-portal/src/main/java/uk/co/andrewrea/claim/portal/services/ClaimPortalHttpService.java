@@ -132,7 +132,11 @@ public class ClaimPortalHttpService {
                     .body(new Gson().toJson(claim))
                     .asJson();
 
-            res.redirect("/claim/%s".format(response.getBody().getObject().getString("id")));
+            String responseId = response.getBody().getObject().getString("id");
+
+            System.out.println(String.format("responseId %s", responseId));
+
+            res.redirect(String.format("/claims/%s", responseId));
 
             res.status(200);
 
@@ -140,13 +144,16 @@ public class ClaimPortalHttpService {
         }, new JsonTransformer());
 
         this.service.get("/claims/:id",(req,res) -> {
-
-            HttpResponse<String> response = Unirest.post(String.format("%s/claims/%s", config.claimQueryServiceUrl, req.params("id")))
+            HttpResponse<String> response = Unirest.get(String.format("%s/claims/%s", config.claimQueryServiceUrl, req.params("id")))
                     .asString();
 
             ClaimDto claim = new Gson().fromJson(response.getBody(), ClaimDto.class);
 
-            return new ModelAndView(claim,"claim-details.hbs");
+            Map map = new HashMap();
+            map.put("id", claim.id);
+            map.put("status", claim.status);
+            return new ModelAndView(map,"claim-details.hbs");
+            
         }, new HandlebarsTemplateEngine());
 
         this.service.exception(Exception.class, (exception, request, response) -> {

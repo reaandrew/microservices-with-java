@@ -3,6 +3,7 @@ package uk.co.andrewrea.claim.query.services;
 import com.codahale.metrics.health.HealthCheck;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
+import org.slf4j.LoggerFactory;
 import spark.Service;
 import uk.co.andrewrea.claim.query.config.ClaimQueryServiceConfiguration;
 import uk.co.andrewrea.claim.query.core.ClaimQueryService;
@@ -10,6 +11,7 @@ import uk.co.andrewrea.claim.query.domain.dtos.ClaimDto;
 import uk.co.andrewrea.infrastructure.spark.JsonTransformer;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -37,9 +39,26 @@ public class ClaimQueryHttpService {
         this.service = Service.ignite().port(config.servicePort).ipAddress(config.serviceIp);
 
         this.service.get("/claims/:id", (req,res) -> {
+            System.out.println(String.format("Received a request for claim %s", req.params("id")));
             ClaimDto claim = this.claimService.findClaimById(req.params("id"));
+
+            System.out.println(String.format("Finding claim for id %s = %s", req.params("id"), claim.id));
+
+            if(claim == null){
+                res.status(404);
+                HashMap map = new HashMap<String, String>();
+                map.put("status", "unknown");
+                return map;
+            }
             return claim;
         }, new JsonTransformer());
+
+
+        this.service.exception(Exception.class, (exception, request, response) -> {
+            // Handle the exception here
+            LoggerFactory.getLogger(this.getClass()).error("An exception occurred", exception);
+            System.out.println(exception);
+        });
 
         this.service.get("/info", (req, res) -> {
             res.status(200);
