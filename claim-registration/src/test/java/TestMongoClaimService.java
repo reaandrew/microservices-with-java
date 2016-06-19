@@ -29,7 +29,7 @@ public class TestMongoClaimService {
         MongoClient mongoClient = new MongoClient(config.mongoDbHost, config.mongoDbPort);
 
         MongoDatabase db = mongoClient.getDatabase("test");
-        
+
         MongoClaimService service = new MongoClaimService(db, config.mongoClaimCollectionName);
 
         ClaimDto claimDto = new SystemUnderTest().getSampleClaim();

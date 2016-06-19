@@ -23,7 +23,9 @@ public class MongoClaimQueryService implements ClaimQueryService {
     @Override
     public ClaimDto FindClaimById(String id) {
         FindIterable<Document> iterable = this.claimCollection.find(Filters.eq("id", id));
-        ClaimDto claim = new Gson().fromJson(iterable.first().toJson(), ClaimDto.class);
-        return claim;
+
+        ClaimDto claimFromDb = new Gson().fromJson(iterable.first().toJson(), ClaimDto.class);
+
+        return claimFromDb;
     }
 }
