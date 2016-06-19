@@ -23,12 +23,13 @@ public class TestMongoClaimService {
 
     @Test
     public void testItSavesAClaim() throws ParseException {
-        MongoClient mongoClient = new MongoClient("0.0.0.0");
-
-        MongoDatabase db = mongoClient.getDatabase("test");
 
         ClaimRegistrationConfiguration config = new ClaimRegistrationConfiguration();
 
+        MongoClient mongoClient = new MongoClient(config.mongoDbHost, config.mongoDbPort);
+
+        MongoDatabase db = mongoClient.getDatabase("test");
+        
         MongoClaimService service = new MongoClaimService(db, config.mongoClaimCollectionName);
 
         ClaimDto claimDto = new SystemUnderTest().getSampleClaim();

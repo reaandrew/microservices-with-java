@@ -15,11 +15,12 @@ public class TestMongoClaimQueryService {
 
     @Test
     public void testFindsAClaim(){
-        MongoClient mongoClient = new MongoClient("0.0.0.0");
-
-        MongoDatabase db = mongoClient.getDatabase("test");
 
         ClaimQueryServiceConfiguration config = new ClaimQueryServiceConfiguration();
+
+        MongoClient mongoClient = new MongoClient(config.mongoDbHost, config.mongoDbPort);
+
+        MongoDatabase db = mongoClient.getDatabase("test");
 
         MongoClaimQueryService service = new MongoClaimQueryService(db, config.mongoClaimQueryCollectionName);
 

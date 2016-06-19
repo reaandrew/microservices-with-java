@@ -13,7 +13,7 @@ public class ClaimRegistrationConfiguration {
     public String amqpPassword;
 
     public int mongoDbPort = 27017;
-    public String mongoDbHost = "0.0.0.0";
+    public String mongoDbHost = "127.0.0.1";
     public String mongoDatabaseName = "claimRegistration";
     public String mongoClaimCollectionName = "claims";
 
