@@ -36,6 +36,7 @@ allprojects {
         compile "commons-cli:commons-cli:$commonsCliVersion"
         compile "com.esotericsoftware.yamlbeans:yamlbeans:$yamlBeansVersion"
 
+        compile "org.aspectj:aspectjrt:1.+"
 
         testCompile 'junit:junit:4.12'
     }

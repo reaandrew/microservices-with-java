@@ -38,6 +38,12 @@ public class TestClaimQueryUpdaterHttpService {
         this.config.amqpUsername = "admin";
         this.config.amqpPassword = "admin";
 
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimRegistrationServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimFraudServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimAwardServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimPaymentServiceExchangeName);
+        this.rabbitMQFacadeForTest.setupTopicExchangeFor(this.config.claimCommunicationServiceExchangeName);
+
         this.claimQueryService = new InMemoryClaimQueryService();
         this.service = new ClaimQueryUpdaterHttpService(this.config, claimQueryService);
         this.service.start();

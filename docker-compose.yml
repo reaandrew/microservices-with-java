@@ -1,14 +1,16 @@
 version: '2'
 services:
     message-broker:
-      image: rabbitmq:3.6-management
+      image: rabbitmq:3-management
       ports:
-        - "14672:15672" # management port (guest:guest)
-        - "4672:5672"   # amqp port
-        - "45672:25672" # cluster por
+        - "127.0.0.1:15672:15672" # management port (guest:guest)
+        - "127.0.0.1:5672:5672"   # amqp port
+        - "127.0.0.1:25672:25672" # cluster port
       environment:
         RABBITMQ_ERLANG_COOKIE: "wabbit"
         RABBITMQ_NODENAME: "broker"
+        RABBITMQ_DEFAULT_USER: "admin"
+        RABBITMQ_DEFAULT_PASS: "admin"
     postgres:
       image: postgres
       ports:

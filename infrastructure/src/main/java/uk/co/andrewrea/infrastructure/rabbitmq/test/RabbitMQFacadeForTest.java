@@ -27,7 +27,7 @@ public class RabbitMQFacadeForTest {
     private Collection<Channel> channels;
     private static final int RABBITMQ_PORT = 5672;
     private static final int RABBITMQ_API_PORT = 15672;
-    private static final String RABBITMQ_IP = "localhost";
+    private static final String RABBITMQ_IP = "127.0.0.1";
     private static final String RABBITMQ_UN = "admin";
     private static final String RABBITMQ_PW = "admin";
 
@@ -49,6 +49,8 @@ public class RabbitMQFacadeForTest {
         factory.setVirtualHost("/");
         factory.setHost(RABBITMQ_IP);
         factory.setPort(RABBITMQ_PORT);
+        factory.setUsername(RABBITMQ_UN);
+        factory.setPassword(RABBITMQ_PW);
         this.conn = factory.newConnection();
         this.deleteAllQueues();
     }
@@ -62,7 +64,10 @@ public class RabbitMQFacadeForTest {
     }
 
     public void deleteAllQueues() throws UnirestException, JSONException, IOException, TimeoutException {
-        String url = String.format("http://%s:%s@localhost:%d/api/queues",RABBITMQ_UN,RABBITMQ_PW, RABBITMQ_API_PORT);
+        String url = String.format("http://%s:%s@%s:%d/api/queues",RABBITMQ_UN,RABBITMQ_PW,RABBITMQ_IP, RABBITMQ_API_PORT);
+
+        Unirest.setTimeouts(1000,1000);
+
         HttpResponse<JsonNode> response = Unirest.get(url).asJson();
 
         Channel channel = conn.createChannel();
@@ -75,6 +80,7 @@ public class RabbitMQFacadeForTest {
         }finally {
             channel.close();
         }
+
     }
 
     public void setupTopicExchangeFor(String exchangeName) throws IOException, TimeoutException {
