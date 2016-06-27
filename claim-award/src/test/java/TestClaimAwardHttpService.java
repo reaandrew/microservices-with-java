@@ -4,19 +4,15 @@ import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import spark.Service;
 import uk.co.andrewrea.claim.award.config.ClaimAwardServiceConfiguration;
 import uk.co.andrewrea.claim.award.domain.dtos.ClaimDto;
 import uk.co.andrewrea.claim.award.domain.events.publish.ClaimAwardedEvent;
 import uk.co.andrewrea.claim.award.domain.events.subscribe.ClaimVerifiedEvent;
 import uk.co.andrewrea.claim.award.services.ClaimAwardedHttpService;
-import uk.co.andrewrea.infrastructure.core.Publisher;
-import uk.co.andrewrea.infrastructure.rabbitmq.RabbitMQPublisher;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQExpections;
 import uk.co.andrewrea.infrastructure.rabbitmq.test.RabbitMQFacadeForTest;
 import uk.co.andrewrea.infrastructure.spark.Settings;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
